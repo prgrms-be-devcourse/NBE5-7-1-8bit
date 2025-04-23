@@ -20,13 +20,13 @@ import programmers.nbe5_7_1_8bit.domain.order_product.entity.OrderProduct;
 import programmers.nbe5_7_1_8bit.global.common.BaseEntity;
 
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name="order_id")
+  @Column(name = "order_id")
   private Long id;
 
   private String address;
@@ -36,8 +36,9 @@ public class Order extends BaseEntity {
   private Status status;
   private boolean is_removed = false;
 
-  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<OrderProduct> orderProducts;
+//  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//  @JoinColumn(name = "order_id")
+//  private List<OrderProduct> orderProducts;
 
   @ManyToOne
   @JoinColumn(name = "member_id", nullable = false)
