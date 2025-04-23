@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import programmers.nbe5_7_1_8bit.domain.product.dto.ProductRequestDto;
+import programmers.nbe5_7_1_8bit.domain.product.dto.ProductResponseDto;
 import programmers.nbe5_7_1_8bit.domain.product.entity.Product;
 import programmers.nbe5_7_1_8bit.domain.product.repository.ProductRepository;
 
@@ -38,17 +39,43 @@ class ProductServiceTests {
         .build();
 
     //when
-    Long productId = productService.createProduct(request);
+    ProductResponseDto product = productService.createProduct(request);
 
     //then
-    Product saved = productRepository.findById(productId).orElseThrow();
+    Product saved = productRepository.findById(product.getId()).orElseThrow();
     assertThat(saved.getName()).isEqualTo("아메리카노");
     assertThat(saved.getPrice()).isEqualTo(1000);
     assertThat(saved.getStock()).isEqualTo(10);
 
   }
 
+  @Test
+  @DisplayName("제품 조회 테스트")
+  void 제품_조회_성공() throws Exception {
+    //given
+    ProductRequestDto request = ProductRequestDto.builder()
+        .name("라떼")
+        .price(2000)
+        .stock(20)
+        .build();
 
+    ProductResponseDto createdProduct = productService.createProduct(request);
+
+    //when
+    ProductResponseDto retrievedProduct = productService.getProduct(createdProduct.getId());
+
+    //then
+    assertThat(retrievedProduct.getId()).isEqualTo(createdProduct.getId());
+    assertThat(retrievedProduct.getName()).isEqualTo("라떼");
+    assertThat(retrievedProduct.getPrice()).isEqualTo(2000);
+    assertThat(retrievedProduct.getStock()).isEqualTo(20);
+
+
+
+  }
+
+  
+  
   
 //  @Test
 //  @DisplayName("연관관계 비교")
