@@ -2,7 +2,6 @@ package programmers.nbe5_7_1_8bit.domain.product.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 import programmers.nbe5_7_1_8bit.domain.product.dto.ProductRequestDto;
 import programmers.nbe5_7_1_8bit.domain.product.dto.ProductResponseDto;
@@ -33,4 +32,16 @@ public class ProductService {
 
     return ProductResponseDto.from(product);
   }
+
+  public ProductResponseDto updateProduct(Long id, ProductRequestDto updateRequest) {
+    Product product = productRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException());
+
+    product.update(updateRequest.getName(), updateRequest.getPrice(), updateRequest.getStock());
+
+    return ProductResponseDto.from(product);
+  }
+
+
+
 }

@@ -36,10 +36,6 @@ public class Order extends BaseEntity {
   private Status status;
   private boolean is_removed = false;
 
-//  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//  @JoinColumn(name = "order_id")
-//  private List<OrderProduct> orderProducts;
-
   @ManyToOne
   @JoinColumn(name = "member_id", nullable = false)
   private Member member;
