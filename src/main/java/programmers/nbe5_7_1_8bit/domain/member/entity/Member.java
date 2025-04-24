@@ -14,7 +14,7 @@ import programmers.nbe5_7_1_8bit.global.common.BaseEntity;
 
 @Entity
 @Getter
-@Table(name = "member")
+@Table(name = "members")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
 
@@ -30,9 +30,7 @@ public class Member extends BaseEntity {
   private boolean is_removed = false;
 
   @Builder
-  public Member(String email){
+  public Member(String email) {
     this.email = email;
   }
-
-
 }
