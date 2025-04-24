@@ -16,11 +16,8 @@ import programmers.nbe5_7_1_8bit.domain.member.entity.Member;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 class InquiryAnswerRepositoryTest {
-
-  @Autowired
-  private InquiryRepository inquiryRepository;
-  @Autowired
-  private InquiryAnswerRepository inquiryAnswerRepository;
+  @Autowired private InquiryRepository inquiryRepository;
+  @Autowired private InquiryAnswerRepository inquiryAnswerRepository;
 
   @Test
   void findInquiryAnswerDtoById() {

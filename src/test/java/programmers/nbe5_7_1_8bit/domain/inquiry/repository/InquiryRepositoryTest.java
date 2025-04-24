@@ -1,6 +1,6 @@
 package programmers.nbe5_7_1_8bit.domain.inquiry.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +22,8 @@ import programmers.nbe5_7_1_8bit.global.config.HibernateFilterManager;
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @Import(HibernateFilterManager.class)
 class InquiryRepositoryTest {
-
-  @Autowired
-  private InquiryRepository inquiryRepository;
-  @Autowired
-  private MemberRepository memberRepository;
+  @Autowired private InquiryRepository inquiryRepository;
+  @Autowired private MemberRepository memberRepository;
 
   @Test
   void findInquiryDtoById() {

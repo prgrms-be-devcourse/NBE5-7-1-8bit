@@ -1,5 +1,6 @@
 package programmers.nbe5_7_1_8bit.domain.inquiry.service;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -19,13 +20,9 @@ import programmers.nbe5_7_1_8bit.domain.member.repository.MemberRepository;
 
 @ExtendWith(MockitoExtension.class)
 class InquiryServiceImplTest {
-
-  @Mock
-  private InquiryRepository inquiryRepository;
-  @Mock
-  private MemberRepository memberRepository;
-  @InjectMocks
-  private InquiryServiceImpl inquiryService;
+  @Mock private InquiryRepository inquiryRepository;
+  @Mock private MemberRepository memberRepository;
+  @InjectMocks private InquiryServiceImpl inquiryService;
 
   @Test
   void should_save_when_notExistMember() {
@@ -54,7 +51,7 @@ class InquiryServiceImplTest {
     inquiryService.save(inquiryDto);
 
     // then
-    verify(memberRepository, never()).save(any(Member.class));
+    verify(memberRepository,never()).save(any(Member.class));
     verify(inquiryRepository).save(any(Inquiry.class));
 
   }
