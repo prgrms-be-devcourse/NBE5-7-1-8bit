@@ -4,6 +4,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import jakarta.persistence.EntityManager;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,6 +119,36 @@ class ProductServiceTests {
     assertThrows(IllegalArgumentException.class, () -> productService.getProduct(createdProduct.getId()));
 
   }
+
+//  @Test
+//  @DisplayName("제품 목록 조회 테스트")
+//  void 제품_목록_조회_성공() throws Exception {
+//    //given
+//    ProductRequestDto.builder()
+//        .name("1")
+//        .price(11)
+//        .stock(111)
+//        .build();
+//
+//    ProductRequestDto.builder()
+//        .name("2")
+//        .price(22)
+//        .stock(222)
+//        .build();
+//
+//    //when
+//    List<ProductResponseDto> products = productService.getAllProduct();
+//
+//    //then
+//    assertThat(products.size()).isEqualTo(2);
+//    assertThat(products.get(0).getName()).isEqualTo("1");
+//    assertThat(products.get(1).getName()).isEqualTo("2");
+//
+//
+//
+//
+//
+//  }
   
   
   

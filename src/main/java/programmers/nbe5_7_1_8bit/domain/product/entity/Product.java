@@ -15,7 +15,6 @@ import programmers.nbe5_7_1_8bit.global.common.BaseEntity;
 @Getter
 @Entity
 @Table(name = "products")
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product extends BaseEntity {
 
