@@ -1,5 +1,6 @@
 package programmers.nbe5_7_1_8bit.domain.product.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,12 @@ public class ProductService {
     return ProductResponseDto.from(product);
   }
 
+  public ProductResponseDto memberGetProduct(Long productId){
+    Product product = productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException());
+
+    return ProductResponseDto.from(product);
+  }
+
   public ProductResponseDto updateProduct(Long id, ProductRequestDto updateRequest) {
     Product product = productRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException());
@@ -50,5 +57,17 @@ public class ProductService {
     productRepository.delete(product);
   }
 
+  public List<ProductResponseDto> memberGetProductList() {
+    List<Product> productList = productRepository.findAll();
 
+    List<ProductResponseDto> productResponseDtoList = new ArrayList<>();
+
+    for (Product product : productList) {
+      if(!product.isRemoved()){
+        productResponseDtoList.add(ProductResponseDto.from(product));
+      }
+    }
+
+    return productResponseDtoList;
+  }
 }

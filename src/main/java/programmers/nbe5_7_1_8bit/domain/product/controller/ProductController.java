@@ -35,6 +35,18 @@ public class ProductController {
     return ResponseEntity.ok(product);
   }
 
+  @GetMapping("/member/{productId}")
+  public ResponseEntity<ProductResponseDto> memberGetProduct(@PathVariable Long productId){
+    ProductResponseDto product = productService.memberGetProduct(productId);
+    return ResponseEntity.ok(product);
+  }
+
+  @GetMapping("/list")
+  public ResponseEntity<List<ProductResponseDto>> memberGetProductList() {
+    List<ProductResponseDto> productList = productService.memberGetProductList();
+    return ResponseEntity.ok(productList);
+  }
+
   @PutMapping("/{productId}")
   public ResponseEntity<ProductResponseDto> updateProduct(
       @PathVariable Long productId, @RequestBody ProductRequestDto updateRequest) {
