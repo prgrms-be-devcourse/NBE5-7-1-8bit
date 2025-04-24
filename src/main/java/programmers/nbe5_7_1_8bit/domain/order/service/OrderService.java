@@ -32,7 +32,7 @@ public class OrderService {
   private final ProductRepository productRepository;
   private final OrderProductRepository orderProductRepository;
 
-  public void save(OrderRequest orderRequest){
+  public void save(OrderRequest orderRequest) {
 
     Member member = memberRepository.findByEmail(orderRequest.getEmail())
         .orElseGet(() -> {
@@ -57,8 +57,6 @@ public class OrderService {
       Product product = productRepository.findById(orderProduct.getProductId())
           .orElseThrow(() -> new IllegalArgumentException("상품이 존재하지 않습니다."));
 
-      // 주문시 해당 상품의 재고 줄이는 기능 필요
-
       product.decreaseStock(orderProduct.getQuantity());
 
       OrderProduct newOrderProduct = OrderProduct.builder()
@@ -73,61 +71,59 @@ public class OrderService {
   }
 
   public void updateOrder(Long orderId, OrderRequest request) {
-    Optional<Order> orderOptional = orderRepository.findById(orderId);
+    Order order = orderRepository.findById(orderId)
+        .orElseThrow(() -> new NoSuchElementException("주문이 존재하지 않습니다."));
 
-    if (orderOptional.isPresent() && orderOptional.get().isOwnedBy(request.getEmail())) {
-      Order order = orderOptional.get();
-
-      //취소된 상품의 재고를 다시 채우는 기능
-      List<OrderProduct> oldProducts = orderProductRepository.findOrderProductByOrder(order);
-
-      for (OrderProduct oldProduct : oldProducts) {
-        Product product = oldProduct.getProduct();
-        product.increaseStock(oldProduct.getQuantity());
-        orderProductRepository.delete(oldProduct);
-      }
-
-      //새로운 주문 상품의 재고를 줄이는 기능 필요
-      List<OrderProduct> newProducts = toOrderProducts(order, request.getOrderProducts());
-
-      for (OrderProduct newProduct : newProducts) {
-        Product product = newProduct.getProduct();
-        product.decreaseStock(newProduct.getQuantity()); //decreaseStock에서 재고가 부족한경우 예외를 반환
-        orderProductRepository.save(newProduct);
-      }
-
-      order.updateAddress(request.getAddress(), request.getPostcode());
-    } else {
-      throw new RuntimeException("Invalid request");
+    if (!order.isOwnedBy(request.getEmail())) {
+      throw new IllegalArgumentException("자신의 주문만 수정 가능합니다.");
     }
+
+    //취소된 상품의 재고를 다시 채우는 기능
+    List<OrderProduct> oldProducts = orderProductRepository.findOrderProductByOrder(order);
+
+    for (OrderProduct oldProduct : oldProducts) {
+      Product product = oldProduct.getProduct();
+      product.increaseStock(oldProduct.getQuantity());
+      orderProductRepository.delete(oldProduct);
+    }
+
+    //새로운 주문 상품의 재고를 줄이는 기능 필요
+    List<OrderProduct> newProducts = toOrderProducts(order, request.getOrderProducts());
+
+    for (OrderProduct newProduct : newProducts) {
+      Product product = newProduct.getProduct();
+      product.decreaseStock(newProduct.getQuantity()); //decreaseStock에서 재고가 부족한경우 예외를 반환
+      orderProductRepository.save(newProduct);
+    }
+    order.updateAddress(request.getAddress(), request.getPostcode());
+
 
   }
 
   public void cancelOrder(Long orderId, String memberEmail) {
-    Optional<Order> orderOptional = orderRepository.findById(orderId);
+    Order order = orderRepository.findById(orderId)
+        .orElseThrow(() -> new NoSuchElementException("주문이 존재하지 않습니다."));
 
-    if (orderOptional.isPresent() && orderOptional.get().isOwnedBy(memberEmail)) {
-      Order order = orderOptional.get();
-
-      //취소된 상품의 재고를 다시 채우는 기능
-      List<OrderProduct> oldProducts = orderProductRepository.findOrderProductByOrder(order);
-
-      for (OrderProduct oldProduct : oldProducts) {
-        Product product = oldProduct.getProduct();
-        product.increaseStock(oldProduct.getQuantity());
-//        orderProductRepository.delete(oldProduct);
-      }
-
-      order.cancelOrder();
-    } else {
-      throw new RuntimeException("Invalid request");
+    if (!order.isOwnedBy(memberEmail)) {
+      throw new IllegalArgumentException("자신의 주문만 취소 가능합니다.");
     }
+
+    //취소된 상품의 재고를 다시 채우는 기능
+    List<OrderProduct> oldProducts = orderProductRepository.findOrderProductByOrder(order);
+
+    for (OrderProduct oldProduct : oldProducts) {
+      Product product = oldProduct.getProduct();
+      product.increaseStock(oldProduct.getQuantity());
+    }
+
+    order.cancelOrder();
+
   }
 
   public List<OrderListResponse> getOrdersByEmail(String email) {
     List<Order> orders = orderRepository.findByMember_Email(email);
 
-    if ( orders.isEmpty() ) {
+    if (orders.isEmpty()) {
       throw new NoSuchElementException("주문 내역이 없습니다.");
     }
 
@@ -139,7 +135,7 @@ public class OrderService {
   public OrderDetailResponse getOrderByIdAndEmail(Long id, String email) {
     Optional<Order> orderOptional = orderRepository.findByIdAndMember_Email(id, email);
 
-    if ( orderOptional.isPresent() ) {
+    if (orderOptional.isPresent()) {
       Order order = orderOptional.get();
       return OrderDetailResponse.from(order, orderProductRepository);
     } else {
@@ -153,7 +149,8 @@ public class OrderService {
 
     for (OrderProductRequest req : requests) {
       Product product = productRepository.findById(req.getProductId())
-          .orElseThrow(() -> new NoSuchElementException("Product not found. ID: " + req.getProductId()));
+          .orElseThrow(
+              () -> new NoSuchElementException("Product not found. ID: " + req.getProductId()));
 
       OrderProduct orderProduct = OrderProduct.builder()
           .quantity(req.getQuantity())

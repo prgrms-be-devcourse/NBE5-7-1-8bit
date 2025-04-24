@@ -24,8 +24,9 @@ public class OrderController {
   private final OrderService orderService;
 
   @PostMapping
-  public void Order(@RequestParam OrderRequest orderRequest){
+  public ResponseEntity<String> order(@RequestBody OrderRequest orderRequest){
     orderService.save(orderRequest);
+    return ResponseEntity.ok("주문 완료");
   }
 
   @PutMapping("/{orderId}")
@@ -37,7 +38,7 @@ public class OrderController {
     return ResponseEntity.ok("주문 수정 완료");
   }
 
-  @PutMapping("/{orderId}/cancel/")
+  @PutMapping("/{orderId}/cancel")
   public ResponseEntity<String> cancelOrder(
       @PathVariable("orderId") Long orderId,
       @RequestParam String email
@@ -56,9 +57,9 @@ public class OrderController {
 
   @GetMapping("/{orderId}")
   public ResponseEntity<OrderDetailResponse> getOrderByIdAndEmail(
-      @PathVariable Long id,
+      @PathVariable Long orderId,
       @RequestParam String email) {
-    OrderDetailResponse orderDetail = orderService.getOrderByIdAndEmail(id, email);
+    OrderDetailResponse orderDetail = orderService.getOrderByIdAndEmail(orderId, email);
     return ResponseEntity.ok(orderDetail);
   }
 }
