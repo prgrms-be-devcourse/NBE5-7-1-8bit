@@ -30,9 +30,7 @@ public class Member extends BaseEntity {
   private boolean is_removed = false;
 
   @Builder
-  public Member(String email){
+  public Member(String email) {
     this.email = email;
   }
-
-
 }

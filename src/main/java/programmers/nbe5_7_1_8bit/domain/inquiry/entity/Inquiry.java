@@ -28,39 +28,39 @@ public class Inquiry extends BaseEntity {
     @Column(name = "inquiry_id")
     private Long id;
 
-    private String title;
-    private String question;
-    private String answer;
+  private String title;
+  private String question;
+  private String answer;
 
-    @Setter
-    @Column(name = "is_removed")
-    private boolean isRemoved = false;
+  @Setter
+  @Column(name = "is_removed")
+  private boolean isRemoved = false;
 
-    private String password;
+  private String password;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
+  @ManyToOne
+  @JoinColumn(name = "member_id")
+  private Member member;
 
-    @OneToOne(
-        cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-        orphanRemoval = true)
-    @JoinColumn(name = "inquiry_id")
-    private InquiryAnswer inquiryAnswer;
+  @OneToOne(
+      cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+      orphanRemoval = true)
+  @JoinColumn(name = "inquiry_id")
+  private InquiryAnswer inquiryAnswer;
 
-    @Builder
-    public Inquiry(
-        String title,
-        String question,
-        String answer,
-        String password,
-        Member member,
-        InquiryAnswer inquiryAnswer) {
-      this.title = title;
-      this.question = question;
-      this.answer = answer;
-      this.password = password;
-      this.member = member;
-      this.inquiryAnswer = inquiryAnswer;
-    }
+  @Builder
+  public Inquiry(
+      String title,
+      String question,
+      String answer,
+      String password,
+      Member member,
+      InquiryAnswer inquiryAnswer) {
+    this.title = title;
+    this.question = question;
+    this.answer = answer;
+    this.password = password;
+    this.member = member;
+    this.inquiryAnswer = inquiryAnswer;
   }
+}

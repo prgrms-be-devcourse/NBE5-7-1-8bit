@@ -12,8 +12,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import programmers.nbe5_7_1_8bit.global.common.BaseEntity;
 
-@Entity
 @Getter
+@Entity
 @Table(name = "products")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product extends BaseEntity {
@@ -33,11 +33,16 @@ public class Product extends BaseEntity {
   private boolean isRemoved = false;
 
   @Builder
-  public Product(String name, int price, int stock){
+  public Product(String name, int price, int stock) {
     this.name = name;
     this.price = price;
     this.stock = stock;
-    
+  }
+
+  public void update(String name, int price, int stock) {
+    this.name = name;
+    this.price = price;
+    this.stock = stock;
   }
 
   public void decreaseStock(int quantity) {
