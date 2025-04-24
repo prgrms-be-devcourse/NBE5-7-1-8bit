@@ -20,7 +20,7 @@ import programmers.nbe5_7_1_8bit.domain.order_product.entity.OrderProduct;
 import programmers.nbe5_7_1_8bit.global.common.BaseEntity;
 
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order extends BaseEntity {
 

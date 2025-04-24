@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import programmers.nbe5_7_1_8bit.domain.product.dto.ProductRequestDto;
 import programmers.nbe5_7_1_8bit.domain.product.dto.ProductResponseDto;
 import programmers.nbe5_7_1_8bit.domain.product.entity.Product;
+import programmers.nbe5_7_1_8bit.domain.product.exception.ProductException.ProductNotFoundException;
+import programmers.nbe5_7_1_8bit.domain.product.exception.ProductException.RemovedProductException;
 import programmers.nbe5_7_1_8bit.domain.product.repository.ProductRepository;
 
 @SpringBootTest
@@ -116,7 +118,7 @@ class ProductServiceTests {
     productService.deleteProduct(createdProduct.getId());
 
     //then
-    assertThrows(IllegalArgumentException.class, () -> productService.getProduct(createdProduct.getId()));
+    assertThrows(IllegalStateException.class, () -> productService.getProduct(createdProduct.getId()));
 
   }
 

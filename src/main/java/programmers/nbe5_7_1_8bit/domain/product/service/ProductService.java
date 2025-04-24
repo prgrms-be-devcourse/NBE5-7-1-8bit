@@ -15,6 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 import programmers.nbe5_7_1_8bit.domain.product.dto.ProductRequestDto;
 import programmers.nbe5_7_1_8bit.domain.product.dto.ProductResponseDto;
 import programmers.nbe5_7_1_8bit.domain.product.entity.Product;
+import programmers.nbe5_7_1_8bit.domain.product.exception.ProductException.ImageReadException;
+import programmers.nbe5_7_1_8bit.domain.product.exception.ProductException.ProductImageNotFoundException;
+import programmers.nbe5_7_1_8bit.domain.product.exception.ProductException.ProductNotFoundException;
+import programmers.nbe5_7_1_8bit.domain.product.exception.ProductException.RemovedProductException;
 import programmers.nbe5_7_1_8bit.domain.product.repository.ProductRepository;
 
 @Service
@@ -39,10 +43,10 @@ public class ProductService {
     return ProductResponseDto.from(savedProduct);
   }
 
-  @Transactional
+  @Transactional(readOnly = true)
   public ProductResponseDto getProduct(Long productId) {
     Product product = productRepository.findById(productId)
-        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+        .orElseThrow(ProductNotFoundException::new);
 
     validateNotRemoved(product);
 
@@ -52,7 +56,7 @@ public class ProductService {
   @Transactional
   public ProductResponseDto updateProduct(Long id, ProductRequestDto updateRequest) {
     Product product = productRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+        .orElseThrow(ProductNotFoundException::new);
 
     validateNotRemoved(product);
 
@@ -65,14 +69,14 @@ public class ProductService {
   @Transactional
   public void deleteProduct(Long id) {
     Product product = productRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException());
+        .orElseThrow(ProductNotFoundException::new);
     productRepository.delete(product);
   }
 
   @Transactional
   public String uploadImage(Long productId, MultipartFile file) throws IOException {
     Product product = productRepository.findById(productId)
-        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 제품입니다."));
+        .orElseThrow(ProductNotFoundException::new);
 
     Path uploadPath = Paths.get(UPLOAD_DIRECTORY);
     if (!Files.exists(uploadPath)) {
@@ -80,6 +84,9 @@ public class ProductService {
     }
 
     String originFileName = file.getOriginalFilename();
+    if(originFileName != null || originFileName.isEmpty()) {
+      throw new IllegalArgumentException("파일명이 유효하지 않습니다.");
+    }
     String baseName = originFileName.substring(0, originFileName.lastIndexOf("."));
     String extension = originFileName.substring(originFileName.lastIndexOf("."));
     String savedFilename = baseName + "-" + UUID.randomUUID() + extension;
@@ -95,18 +102,18 @@ public class ProductService {
   @Transactional(readOnly = true)
   public Resource loadImage(Long productId) throws IOException {
     Product product = productRepository.findById(productId)
-        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 제품입니다."));
+        .orElseThrow(ProductNotFoundException::new);
 
     String imagePath = product.getImagePath();
     if(imagePath == null || imagePath.isEmpty()) {
-      throw new IllegalStateException("해당 제품에 이미지가 없습니다.");
+      throw new ProductImageNotFoundException();
     }
 
     Path path = Paths.get(UPLOAD_DIRECTORY).resolve(imagePath);
     Resource resource = new UrlResource(path.toUri());
 
     if(!resource.exists() || !resource.isReadable()) {
-      throw new IOException("파일을 읽을 수 없습니다: " + imagePath);
+      throw new ImageReadException(imagePath);
     }
 
     return resource;
@@ -115,7 +122,7 @@ public class ProductService {
 
   private void validateNotRemoved(Product product) {
     if(product.isRemoved()) {
-      throw new IllegalStateException("삭제된 상품입니다.");
+      throw new RemovedProductException();
     }
   }
 
