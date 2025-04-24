@@ -1,4 +1,4 @@
-package programmers.nbe5_7_1_8bit.domain.product.entity;
+package programmers.nbe5_7_1_8bit.domain.inquiry.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,32 +10,29 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import programmers.nbe5_7_1_8bit.global.common.BaseEntity;
 
 @Entity
-@Table(name = "products")
+@Table(name = "inquiry_answer")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Product extends BaseEntity {
+public class InquiryAnswer extends BaseEntity {
 
   @Id
-  @Column(name = "product_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "inquiry_answer_id")
   private Long id;
 
-  private String name;
+  private String answer;
 
-  private int price;
-
-  private int stock;
-
+  @Setter
   @Column(name = "is_removed")
-  private boolean isRemoved = false;
+  private boolean isRemoved;
 
   @Builder
-  public Product(String name, int price, int stock) {
-    this.name = name;
-    this.price = price;
-    this.stock = stock;
+  public InquiryAnswer(String answer) {
+    this.answer = answer;
+    this.isRemoved = false;
   }
 }

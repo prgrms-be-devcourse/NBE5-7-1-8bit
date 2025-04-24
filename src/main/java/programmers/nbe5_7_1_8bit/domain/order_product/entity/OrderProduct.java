@@ -5,9 +5,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import programmers.nbe5_7_1_8bit.global.common.BaseEntity;
+import lombok.Setter;
+import programmers.nbe5_7_1_8bit.domain.order.entity.Order;
 import programmers.nbe5_7_1_8bit.domain.product.entity.Product;
-
+import programmers.nbe5_7_1_8bit.global.common.BaseEntity;
 
 @Entity
 @Getter
@@ -26,10 +27,14 @@ public class OrderProduct extends BaseEntity {
   @JoinColumn(name = "product_id")
   private Product product;
 
+  @Setter
+  @ManyToOne
+  @JoinColumn(name = "order_id")
+  private Order order;
+
   @Builder
   public OrderProduct(int quantity, Product product) {
     this.quantity = quantity;
     this.product = product;
   }
-
 }
