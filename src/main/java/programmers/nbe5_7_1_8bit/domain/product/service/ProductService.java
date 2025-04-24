@@ -43,5 +43,9 @@ public class ProductService {
   }
 
 
-
+  public void deleteProduct(Long id) {
+    Product product = productRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException());
+    productRepository.delete(product);
+  }
 }
