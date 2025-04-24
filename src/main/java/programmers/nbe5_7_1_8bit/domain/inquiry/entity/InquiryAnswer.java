@@ -1,4 +1,4 @@
-package programmers.nbe5_7_1_8bit.domain.member.entity;
+package programmers.nbe5_7_1_8bit.domain.inquiry.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,29 +10,29 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import programmers.nbe5_7_1_8bit.global.common.BaseEntity;
 
 @Entity
+@Table(name = "inquiry_answer")
 @Getter
-@Table(name = "members")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member extends BaseEntity {
+public class InquiryAnswer extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(nullable = false)
-  private Long Id;
+  @Column(name = "inquiry_answer_id")
+  private Long id;
 
-  @Column(nullable = false, length = 100)
-  private String email;
+  private String answer;
 
-  @Column(nullable = false)
-  private boolean is_removed = false;
+  @Setter
+  @Column(name = "is_removed")
+  private boolean isRemoved;
 
   @Builder
-  public Member(String email){
-    this.email = email;
+  public InquiryAnswer(String answer) {
+    this.answer = answer;
+    this.isRemoved = false;
   }
-
-
 }
