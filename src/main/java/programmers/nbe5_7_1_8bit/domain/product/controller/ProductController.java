@@ -6,6 +6,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import java.util.List;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +17,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import programmers.nbe5_7_1_8bit.domain.product.dto.ProductRequestDto;
 import programmers.nbe5_7_1_8bit.domain.product.dto.ProductResponseDto;
@@ -39,8 +41,21 @@ public class ProductController {
     return ResponseEntity.ok(product);
   }
 
+  @GetMapping("/member/{productId}")
+  public ResponseEntity<ProductResponseDto> memberGetProduct(@PathVariable Long productId){
+    ProductResponseDto product = productService.memberGetProduct(productId);
+    return ResponseEntity.ok(product);
+  }
+
+  @GetMapping("/list")
+  public ResponseEntity<List<ProductResponseDto>> memberGetProductList() {
+    List<ProductResponseDto> productList = productService.memberGetProductList();
+    return ResponseEntity.ok(productList);
+  }
+
   @PutMapping("/{productId}")
-  public ResponseEntity<ProductResponseDto> updateProduct (@PathVariable Long productId, @RequestBody ProductRequestDto updateRequest) {
+  public ResponseEntity<ProductResponseDto> updateProduct(
+      @PathVariable Long productId, @RequestBody ProductRequestDto updateRequest) {
     ProductResponseDto updatedProduct = productService.updateProduct(productId, updateRequest);
     return ResponseEntity.ok(updatedProduct);
   }

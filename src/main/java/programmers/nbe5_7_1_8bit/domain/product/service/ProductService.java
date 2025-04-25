@@ -1,5 +1,4 @@
 package programmers.nbe5_7_1_8bit.domain.product.service;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,12 +18,19 @@ import programmers.nbe5_7_1_8bit.domain.product.exception.ProductException.Image
 import programmers.nbe5_7_1_8bit.domain.product.exception.ProductException.ProductImageNotFoundException;
 import programmers.nbe5_7_1_8bit.domain.product.exception.ProductException.ProductNotFoundException;
 import programmers.nbe5_7_1_8bit.domain.product.exception.ProductException.RemovedProductException;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import programmers.nbe5_7_1_8bit.domain.product.dto.ProductRequestDto;
+import programmers.nbe5_7_1_8bit.domain.product.dto.ProductResponseDto;
+import programmers.nbe5_7_1_8bit.domain.product.entity.Product;
 import programmers.nbe5_7_1_8bit.domain.product.repository.ProductRepository;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
-
   private final ProductRepository productRepository;
 
   @Value("${file.upload-directory}")
@@ -32,7 +38,6 @@ public class ProductService {
 
   @Transactional
   public ProductResponseDto createProduct(ProductRequestDto request) {
-
     Product product = Product.builder()
         .name(request.getName())
         .price(request.getPrice())
@@ -49,7 +54,6 @@ public class ProductService {
         .orElseThrow(ProductNotFoundException::new);
 
     validateNotRemoved(product);
-
     return ProductResponseDto.from(product);
   }
 
@@ -64,7 +68,6 @@ public class ProductService {
 
     return ProductResponseDto.from(product);
   }
-
 
   @Transactional
   public void deleteProduct(Long id) {
@@ -125,7 +128,4 @@ public class ProductService {
       throw new RemovedProductException();
     }
   }
-
-
-
 }

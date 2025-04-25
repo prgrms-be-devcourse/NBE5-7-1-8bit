@@ -14,12 +14,14 @@ import jakarta.persistence.Table;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import programmers.nbe5_7_1_8bit.domain.member.entity.Member;
 import programmers.nbe5_7_1_8bit.domain.order_product.entity.OrderProduct;
 import programmers.nbe5_7_1_8bit.global.common.BaseEntity;
 
 @Entity
+@Getter
 @Table(name = "orders")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order extends BaseEntity {
@@ -49,5 +51,18 @@ public class Order extends BaseEntity {
     this.postcode = postcode;
     this.status = status;
     this.member = member;
+  }
+
+  public void updateAddress(String address, String postcode) {
+    this.address = address;
+    this.postcode = postcode;
+  }
+
+  public void cancelOrder() {
+    this.status = Status.CANCELED;
+  }
+
+  public boolean isOwnedBy(String email) {
+    return this.member != null && this.member.getEmail().equals(email);
   }
 }

@@ -119,6 +119,7 @@ class ProductServiceTests {
 
     //then
     assertThrows(IllegalStateException.class, () -> productService.getProduct(createdProduct.getId()));
+    assertThrows(IllegalArgumentException.class, () -> productService.getProduct(createdProduct.getId()));
 
   }
 

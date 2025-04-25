@@ -48,4 +48,16 @@ public class Product extends BaseSoftDeleteEntity {
     this.price = price;
     this.stock = stock;
   }
+
+  public void decreaseStock(int quantity) {
+    if (this.stock < quantity) {
+      throw new IllegalStateException("상품 재고가 부족합니다. 상품명: " + name);
+    }
+    this.stock -= quantity;
+  }
+
+  public void increaseStock(int quantity) {
+    this.stock += quantity;
+  }
+
 }
