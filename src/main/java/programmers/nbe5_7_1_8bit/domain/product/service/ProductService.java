@@ -58,6 +58,11 @@ public class ProductService {
     Product product = productRepository.findById(productId)
         .orElseThrow(ProductNotFoundException::new);
 
+    validateNotRemoved(product);
+
+    return ProductResponseDto.from(product);
+  }
+
   @Transactional
   public ProductResponseDto memberGetProduct(Long productId){
     Product product = productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException());
@@ -96,7 +101,7 @@ public class ProductService {
     }
 
     String originFileName = file.getOriginalFilename();
-    if(originFileName != null || originFileName.isEmpty()) {
+    if(originFileName == null || originFileName.isEmpty()) {
       throw new IllegalArgumentException("파일명이 유효하지 않습니다.");
     }
     String baseName = originFileName.substring(0, originFileName.lastIndexOf("."));
@@ -138,8 +143,18 @@ public class ProductService {
       throw new RemovedProductException();
     }
   }
-    
+
   public List<ProductResponseDto> memberGetProductList() {
     List<Product> productList = productRepository.findAll();
-    
+
+    List<ProductResponseDto> productResponseDtoList = new ArrayList<>();
+
+    for (Product product : productList) {
+      if(!product.isRemoved()){
+        productResponseDtoList.add(ProductResponseDto.from(product));
+      }
+    }
+
+    return productResponseDtoList;
+  }
 }

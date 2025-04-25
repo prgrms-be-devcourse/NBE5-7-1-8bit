@@ -23,11 +23,12 @@ import programmers.nbe5_7_1_8bit.global.common.BaseSoftDeleteEntity;
 @Getter
 @Filter(name = "softDeleteFilter", condition = "is_removed = :isRemoved")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Inquiry extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "inquiry_id")
-    private Long id;
+public class Inquiry extends BaseSoftDeleteEntity {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "inquiry_id")
+  private Long id;
 
   private String title;
   private String question;

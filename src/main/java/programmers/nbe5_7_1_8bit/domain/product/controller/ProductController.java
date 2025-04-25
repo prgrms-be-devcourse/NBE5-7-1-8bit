@@ -74,15 +74,6 @@ public class ProductController {
   @GetMapping("/{productId}/image")
   public ResponseEntity<Resource> loadImage(@PathVariable Long productId) throws IOException {
     Resource resource = productService.loadImage(productId);
-    return ResponseEntity.ok()
-        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
-        .contentType(MediaType.IMAGE_JPEG) 
-        .body(resource);
-  }
-
-  @GetMapping("/{productId}/image")
-  public ResponseEntity<Resource> loadImage(@PathVariable Long productId) throws IOException {
-    Resource resource = productService.loadImage(productId);
 
     return ResponseEntity.ok()
         .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
