@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -50,6 +52,12 @@ public class ProductService {
   }
 
   @Transactional
+  public ProductResponseDto memberGetProduct(Long productId){
+    Product product = productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException());
+
+    return ProductResponseDto.from(product);
+  }
+
   public ProductResponseDto updateProduct(Long id, ProductRequestDto updateRequest) {
     Product product = productRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
@@ -120,5 +128,17 @@ public class ProductService {
   }
 
 
+  public List<ProductResponseDto> memberGetProductList() {
+    List<Product> productList = productRepository.findAll();
 
+    List<ProductResponseDto> productResponseDtoList = new ArrayList<>();
+
+    for (Product product : productList) {
+      if(!product.isRemoved()){
+        productResponseDtoList.add(ProductResponseDto.from(product));
+      }
+    }
+
+    return productResponseDtoList;
+  }
 }
