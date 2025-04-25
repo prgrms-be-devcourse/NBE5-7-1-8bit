@@ -10,14 +10,15 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import programmers.nbe5_7_1_8bit.global.common.BaseEntity;
+import org.hibernate.annotations.Filter;
+import programmers.nbe5_7_1_8bit.global.common.BaseSoftDeleteEntity;
 
 @Entity
 @Table(name = "inquiry_answer")
 @Getter
+@Filter(name = "softDeleteFilter", condition = "is_removed = :isRemoved")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class InquiryAnswer extends BaseEntity {
+public class InquiryAnswer extends BaseSoftDeleteEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,13 +27,12 @@ public class InquiryAnswer extends BaseEntity {
 
   private String answer;
 
-  @Setter
-  @Column(name = "is_removed")
-  private boolean isRemoved;
-
   @Builder
   public InquiryAnswer(String answer) {
     this.answer = answer;
-    this.isRemoved = false;
+  }
+
+  public void update(InquiryAnswerDto inquiryAnswerDto) {
+    this.answer = inquiryAnswerDto.getAnswer();
   }
 }
