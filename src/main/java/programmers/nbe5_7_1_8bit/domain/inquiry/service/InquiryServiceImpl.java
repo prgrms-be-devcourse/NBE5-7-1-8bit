@@ -1,15 +1,16 @@
 package programmers.nbe5_7_1_8bit.domain.inquiry.service;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import programmers.nbe5_7_1_8bit.domain.inquiry.entity.Inquiry;
 import programmers.nbe5_7_1_8bit.domain.inquiry.entity.InquiryDto;
 import programmers.nbe5_7_1_8bit.domain.inquiry.repository.InquiryRepository;
-import programmers.nbe5_7_1_8bit.domain.member.entity.Member;
-import programmers.nbe5_7_1_8bit.domain.member.repository.MemberRepository;
+import programmers.nbe5_7_1_8bit.domain.inquiry.utils.PasswordUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -18,17 +19,11 @@ import programmers.nbe5_7_1_8bit.domain.member.repository.MemberRepository;
 public class InquiryServiceImpl implements InquiryService {
 
   private final InquiryRepository inquiryRepository;
-  private final MemberRepository memberRepository;
 
   @Override
   public void save(InquiryDto inquiryDto) {
-    String email = inquiryDto.getEmail();
-    Member member =
-        memberRepository
-            .findByEmail(email)
-            .orElseGet(() -> memberRepository.save(new Member(email)));
-
-    inquiryRepository.save(InquiryDto.of(inquiryDto.getTitle(), inquiryDto.getQuestion(), member));
+    inquiryRepository.save(
+        InquiryDto.of(inquiryDto.getTitle(), inquiryDto.getQuestion(), inquiryDto.getName(),inquiryDto.getPassword()));
   }
 
   @Override
@@ -51,5 +46,11 @@ public class InquiryServiceImpl implements InquiryService {
   @Override
   public void softDelete(Long inquiryId) {
     inquiryRepository.findById(inquiryId).ifPresent(inquiry -> inquiry.softDelete());
+  }
+
+  @Override
+  public boolean checkInquiryPassword(Long inquiryId, String password) {
+    Optional<Inquiry> inquiry = inquiryRepository.findById(inquiryId);
+    return inquiry.isPresent() && PasswordUtils.checkPw(inquiry.get().getPassword(), password);
   }
 }

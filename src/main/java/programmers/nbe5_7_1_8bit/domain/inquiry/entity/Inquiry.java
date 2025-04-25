@@ -7,7 +7,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -15,7 +14,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Filter;
-import programmers.nbe5_7_1_8bit.domain.member.entity.Member;
 import programmers.nbe5_7_1_8bit.global.common.BaseSoftDeleteEntity;
 
 @Entity
@@ -32,11 +30,8 @@ public class Inquiry extends BaseSoftDeleteEntity {
 
   private String title;
   private String question;
+  private String name;
   private String password;
-
-  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-  @JoinColumn(name = "member_id")
-  private Member member;
 
   @OneToOne(
       cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
@@ -45,11 +40,11 @@ public class Inquiry extends BaseSoftDeleteEntity {
   private InquiryAnswer inquiryAnswer;
 
   @Builder
-  public Inquiry(String title, String question, String password, Member member) {
+  public Inquiry(String title, String question, String password, String name) {
     this.title = title;
     this.question = question;
     this.password = password;
-    this.member = member;
+    this.name = name;
   }
 
   public void update(InquiryDto inquiryDto) {

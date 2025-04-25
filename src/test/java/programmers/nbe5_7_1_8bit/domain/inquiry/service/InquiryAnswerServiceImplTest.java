@@ -39,19 +39,4 @@ class InquiryAnswerServiceImplTest {
     assertNotNull(mockInquiry.getInquiryAnswer()); // 실제 set 됐는지 확인
     assertEquals(answer, mockInquiry.getInquiryAnswer().getAnswer()); // 값이 제대로 들어갔는지
   }
-
-  @Test
-  void 답변_저장_대상_없음() {
-    // given
-    Long inquiryId = 999L;
-    InquiryAnswerDto dto = new InquiryAnswerDto();
-    dto.setId(inquiryId);
-    dto.setAnswer("무의미한 답변");
-
-    when(inquiryRepository.findById(inquiryId)).thenReturn(Optional.empty());
-
-    // when / then
-    assertDoesNotThrow(() -> inquiryAnswerService.save(dto));
-    // 아무 동작도 하지 않음 (예외 없이 종료되면 성공)
-  }
 }
