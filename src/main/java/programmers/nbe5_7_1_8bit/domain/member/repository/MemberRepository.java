@@ -6,7 +6,7 @@ import programmers.nbe5_7_1_8bit.domain.member.entity.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-  public Optional<Member> findByEmail(String email);
-
+  Optional<Member> findByEmail(String email);
+  
 }
 
