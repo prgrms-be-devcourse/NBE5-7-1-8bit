@@ -4,7 +4,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import jakarta.persistence.EntityManager;
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import programmers.nbe5_7_1_8bit.domain.product.dto.ProductRequestDto;
 import programmers.nbe5_7_1_8bit.domain.product.dto.ProductResponseDto;
 import programmers.nbe5_7_1_8bit.domain.product.entity.Product;
-import programmers.nbe5_7_1_8bit.domain.product.exception.ProductException.ProductNotFoundException;
-import programmers.nbe5_7_1_8bit.domain.product.exception.ProductException.RemovedProductException;
 import programmers.nbe5_7_1_8bit.domain.product.repository.ProductRepository;
 
 @SpringBootTest
@@ -92,7 +89,7 @@ class ProductServiceTests {
         .build();
 
     //when
-    ProductResponseDto updatedProduct = productService.updateProduct(createdProduct.getId(), updateRequest);
+    ProductResponseDto updatedProduct = productService.editProduct(createdProduct.getId(), updateRequest);
 
     //then
     assertThat(updatedProduct.getName()).isEqualTo("아이스티티");
