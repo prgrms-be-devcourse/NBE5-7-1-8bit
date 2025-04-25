@@ -6,6 +6,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import java.util.List;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,23 +71,22 @@ public class ProductController {
     return ResponseEntity.ok(fileName);
   }
 
-//  @GetMapping("/image/{filename}")
-//  public ResponseEntity<Resource> loadImage(@PathVariable String filename)
-//      throws IOException {
-//    Resource resource = productService.loadImage(filename);
-//
-//    return ResponseEntity.ok()
-//        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
-//        .contentType(MediaType.IMAGE_JPEG) // 필요시 이미지 포맷 동적으로
-//        .body(resource);
-//  }
+  @GetMapping("/{productId}/image")
+  public ResponseEntity<Resource> loadImage(@PathVariable Long productId) throws IOException {
+    Resource resource = productService.loadImage(productId);
+    return ResponseEntity.ok()
+        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+        .contentType(MediaType.IMAGE_JPEG) 
+        .body(resource);
+  }
+
   @GetMapping("/{productId}/image")
   public ResponseEntity<Resource> loadImage(@PathVariable Long productId) throws IOException {
     Resource resource = productService.loadImage(productId);
 
     return ResponseEntity.ok()
         .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
-        .contentType(MediaType.IMAGE_JPEG) // 필요시 이미지 포맷 동적으로
+        .contentType(MediaType.IMAGE_JPEG)
         .body(resource);
   }
 

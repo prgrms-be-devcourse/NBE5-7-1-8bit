@@ -16,8 +16,8 @@ import programmers.nbe5_7_1_8bit.domain.manager.service.AuthService;
 import programmers.nbe5_7_1_8bit.domain.manager.service.AuthServiceImpl;
 import programmers.nbe5_7_1_8bit.domain.member.repository.MemberRepository;
 
-@Configuration
 @EnableJpaAuditing
+@Configuration
 @RequiredArgsConstructor
 @EnableAspectJAutoProxy
 public class CustomConfiguration {

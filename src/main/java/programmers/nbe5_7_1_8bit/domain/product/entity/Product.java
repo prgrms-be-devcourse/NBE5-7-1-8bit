@@ -11,15 +11,18 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.SQLDelete;
 import programmers.nbe5_7_1_8bit.global.common.BaseEntity;
+import programmers.nbe5_7_1_8bit.global.common.BaseSoftDeleteEntity;
 
 @Getter
 @Entity
 @SQLDelete(sql = "UPDATE products SET is_removed = true WHERE product_id = ?")
 @Table(name = "products")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Product extends BaseEntity {
+@Filter(name = "softDeleteFilter", condition = "is_removed = :isRemoved")
+public class Product extends BaseSoftDeleteEntity {
 
   @Id
   @Column(name = "product_id")
@@ -33,9 +36,6 @@ public class Product extends BaseEntity {
   @Setter
   @Column(name = "image_path")
   private String imagePath;
-
-  @Column(name = "is_removed")
-  private boolean isRemoved = false;
 
   @Builder
   public Product(String name, int price, int stock) {
