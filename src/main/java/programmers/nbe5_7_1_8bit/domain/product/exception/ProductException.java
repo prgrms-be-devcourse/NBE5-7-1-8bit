@@ -23,6 +23,7 @@ public class ProductException extends RuntimeException {
   public static class ProductImageNotFoundException extends ProductException {
 
     public ProductImageNotFoundException() {
+      super("해당 제품에 이미지가 없습니다.");
     }
   }
 
