@@ -7,8 +7,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import programmers.nbe5_7_1_8bit.domain.product.dto.ProductRequestDto;
 import programmers.nbe5_7_1_8bit.domain.product.dto.ProductResponseDto;
@@ -54,8 +53,7 @@ public class ProductController {
   }
 
   @PutMapping("/{productId}")
-  public ResponseEntity<ProductResponseDto> updateProduct(
-      @PathVariable Long productId, @RequestBody ProductRequestDto updateRequest) {
+  public ResponseEntity<ProductResponseDto> updateProduct (@PathVariable Long productId, @RequestBody ProductRequestDto updateRequest) {
     ProductResponseDto updatedProduct = productService.updateProduct(productId, updateRequest);
     return ResponseEntity.ok(updatedProduct);
   }
@@ -73,6 +71,14 @@ public class ProductController {
     return ResponseEntity.ok(fileName);
   }
 
+  @GetMapping("/{productId}/image")
+  public ResponseEntity<Resource> loadImage(@PathVariable Long productId) throws IOException {
+    Resource resource = productService.loadImage(productId);
+    return ResponseEntity.ok()
+        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+        .contentType(MediaType.IMAGE_JPEG) 
+        .body(resource);
+  }
 
   @GetMapping("/{productId}/image")
   public ResponseEntity<Resource> loadImage(@PathVariable Long productId) throws IOException {

@@ -18,6 +18,7 @@ import programmers.nbe5_7_1_8bit.global.common.BaseSoftDeleteEntity;
 
 @Getter
 @Entity
+@SQLDelete(sql = "UPDATE products SET is_removed = true WHERE product_id = ?")
 @Table(name = "products")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Filter(name = "softDeleteFilter", condition = "is_removed = :isRemoved")

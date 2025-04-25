@@ -21,8 +21,12 @@ import programmers.nbe5_7_1_8bit.domain.product.exception.ProductException.Remov
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import programmers.nbe5_7_1_8bit.domain.product.dto.ProductRequestDto;
 import programmers.nbe5_7_1_8bit.domain.product.dto.ProductResponseDto;
 import programmers.nbe5_7_1_8bit.domain.product.entity.Product;
@@ -38,6 +42,7 @@ public class ProductService {
 
   @Transactional
   public ProductResponseDto createProduct(ProductRequestDto request) {
+
     Product product = Product.builder()
         .name(request.getName())
         .price(request.getPrice())
@@ -52,6 +57,10 @@ public class ProductService {
   public ProductResponseDto getProduct(Long productId) {
     Product product = productRepository.findById(productId)
         .orElseThrow(ProductNotFoundException::new);
+
+  @Transactional
+  public ProductResponseDto memberGetProduct(Long productId){
+    Product product = productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException());
 
     validateNotRemoved(product);
     return ProductResponseDto.from(product);
@@ -102,6 +111,7 @@ public class ProductService {
     return savedFilename;
   }
 
+
   @Transactional(readOnly = true)
   public Resource loadImage(Long productId) throws IOException {
     Product product = productRepository.findById(productId)
@@ -128,4 +138,8 @@ public class ProductService {
       throw new RemovedProductException();
     }
   }
+    
+  public List<ProductResponseDto> memberGetProductList() {
+    List<Product> productList = productRepository.findAll();
+    
 }

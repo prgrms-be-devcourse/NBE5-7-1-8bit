@@ -2,6 +2,7 @@ package programmers.nbe5_7_1_8bit.domain.product.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Builder
