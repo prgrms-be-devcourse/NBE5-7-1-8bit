@@ -1,0 +1,8 @@
+cookie:
+  session-cookie-key: JSESSIONID
+  max-age: 3600
+  http-only: true
+  secure: true
+session:
+  authenticate-key: authenticated
+  max-inactive-interval: 1800
