@@ -58,14 +58,23 @@ public class ProductController {
     return ResponseEntity.ok(fileName);
   }
 
-
+//  @GetMapping("/image/{filename}")
+//  public ResponseEntity<Resource> loadImage(@PathVariable String filename)
+//      throws IOException {
+//    Resource resource = productService.loadImage(filename);
+//
+//    return ResponseEntity.ok()
+//        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+//        .contentType(MediaType.IMAGE_JPEG) // 필요시 이미지 포맷 동적으로
+//        .body(resource);
+//  }
   @GetMapping("/{productId}/image")
   public ResponseEntity<Resource> loadImage(@PathVariable Long productId) throws IOException {
     Resource resource = productService.loadImage(productId);
 
     return ResponseEntity.ok()
         .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
-        .contentType(MediaType.IMAGE_JPEG)
+        .contentType(MediaType.IMAGE_JPEG) // 필요시 이미지 포맷 동적으로
         .body(resource);
   }
 
