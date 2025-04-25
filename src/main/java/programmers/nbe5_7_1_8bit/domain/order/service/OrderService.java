@@ -64,6 +64,8 @@ public class OrderService {
           .quantity(orderProduct.getQuantity())
           .build();
 
+      newOrderProduct.setOrder(order);
+
       orderProductRepository.save(newOrderProduct);
 
     }
