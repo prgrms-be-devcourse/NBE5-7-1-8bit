@@ -70,7 +70,7 @@ public class ProductService {
   public void deleteProduct(Long id) {
     Product product = productRepository.findById(id)
         .orElseThrow(ProductNotFoundException::new);
-    productRepository.delete(product);
+    product.softDelete();
   }
 
   @Transactional
