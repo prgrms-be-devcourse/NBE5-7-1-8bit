@@ -12,9 +12,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import programmers.nbe5_7_1_8bit.global.common.BaseEntity;
 
+@Getter
 @Entity
 @Table(name = "products")
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product extends BaseEntity {
 
@@ -38,4 +38,22 @@ public class Product extends BaseEntity {
     this.price = price;
     this.stock = stock;
   }
+
+  public void update(String name, int price, int stock) {
+    this.name = name;
+    this.price = price;
+    this.stock = stock;
+  }
+
+  public void decreaseStock(int quantity) {
+    if (this.stock < quantity) {
+      throw new IllegalStateException("상품 재고가 부족합니다. 상품명: " + name);
+    }
+    this.stock -= quantity;
+  }
+
+  public void increaseStock(int quantity) {
+    this.stock += quantity;
+  }
+
 }
