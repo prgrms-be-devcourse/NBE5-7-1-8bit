@@ -36,7 +36,7 @@ public class AdminAspect {
             RequestContextHolder.currentRequestAttributes()).getResponse();
 
         if (response != null) {
-          response.sendRedirect("/manager/login"); // 원하는 경로로 리다이렉트
+          response.sendRedirect("/api/admin/login"); // 원하는 경로로 리다이렉트
         }
       } catch (IOException ioException) {
         log.error("리다이렉트 실패", ioException);
