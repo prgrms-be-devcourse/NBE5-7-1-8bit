@@ -3,7 +3,7 @@ package programmers.nbe5_7_1_8bit.global.common;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
@@ -21,11 +21,11 @@ public abstract class BaseSoftDeleteEntity {
 
   @CreatedDate
   @Column(name = "created_at", updatable = false)
-  private LocalDate createdAt;
+  private LocalDateTime createdAt;
 
   @LastModifiedDate
   @Column(name = "updated_at")
-  private LocalDate updatedAt;
+  private LocalDateTime updatedAt;
 
   @Column(name = "is_removed")
   private boolean isRemoved = false;

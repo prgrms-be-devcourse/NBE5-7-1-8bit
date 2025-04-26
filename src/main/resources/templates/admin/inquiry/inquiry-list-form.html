@@ -25,12 +25,70 @@
         <td th:text="${stat.index}"></td>
         <td th:text="${inquiry.title}"></td>
         <td th:text="${inquiry.getName}"></td>
-        <td th:text="${inquiry.updatedAt}"></td>
-        <td th:text="${inquiry.createdAt}"></td>
+        <td th:text="${#temporals.format(inquiry.updatedAt, 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text="${#temporals.format(inquiry.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
       </tr>
       </tbody>
     </table>
   </div>
+  <!-- 페이지네이션 추가 -->
+  <nav class="d-flex justify-content-center mt-4">
+    <ul class="pagination" style="width:100%; max-width:800px; justify-content:center;">
+
+      <!-- 이전 버튼 -->
+      <li class="page-item" th:classappend="${inquires.first} ? 'disabled'">
+        <a class="page-link"
+           th:href="@{/api/inq/page(page=${inquires.number - 1}, offset=${inquires.size})}">
+          &lt;
+        </a>
+      </li>
+
+      <!-- 첫 페이지로 이동하는 버튼 -->
+      <li class="page-item" th:if="${inquires.number > 6}">
+        <a class="page-link" th:href="@{/api/inq/page(page=0, offset=${inquires.size})}">1</a>
+      </li>
+
+      <!-- 앞쪽 '...' -->
+      <li class="page-item disabled" th:if="${inquires.number > 6}">
+        <span class="page-link">...</span>
+      </li>
+
+      <!-- 현재 페이지 기준, 앞뒤로 6개씩 보이기 -->
+      <li class="page-item"
+          th:each="pageNum : ${#numbers.sequence(
+          (inquires.number - 6) < 0 ? 0 : (inquires.number - 6),
+          (inquires.number + 6) > (inquires.totalPages - 1) ? (inquires.totalPages - 1) : (inquires.number + 6)
+        )}"
+          th:classappend="${pageNum == inquires.number} ? 'active'">
+        <a class="page-link"
+           th:href="@{/api/inq/page(page=${pageNum}, offset=${inquires.size})}"
+           th:text="${pageNum + 1}">
+        </a>
+      </li>
+
+      <!-- 뒤쪽 '...' -->
+      <li class="page-item disabled" th:if="${inquires.number < inquires.totalPages - 7}">
+        <span class="page-link">...</span>
+      </li>
+
+      <!-- 마지막 페이지로 이동하는 버튼 -->
+      <li class="page-item" th:if="${inquires.number < inquires.totalPages - 7}">
+        <a class="page-link"
+           th:href="@{/api/inq/page(page=${inquires.totalPages - 1}, offset=${inquires.size})}"
+           th:text="${inquires.totalPages}">
+        </a>
+      </li>
+
+      <!-- 다음 버튼 -->
+      <li class="page-item" th:classappend="${inquires.last} ? 'disabled'">
+        <a class="page-link"
+           th:href="@{/api/inq/page(page=${inquires.number + 1}, offset=${inquires.size})}">
+          &gt;
+        </a>
+      </li>
+
+    </ul>
+  </nav>
 
   <script>
     function viewInquiry(inquiryId) {

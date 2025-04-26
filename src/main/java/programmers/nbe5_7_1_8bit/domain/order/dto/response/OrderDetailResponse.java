@@ -1,5 +1,8 @@
 package programmers.nbe5_7_1_8bit.domain.order.dto.response;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,10 +10,6 @@ import lombok.Setter;
 import programmers.nbe5_7_1_8bit.domain.order.entity.Order;
 import programmers.nbe5_7_1_8bit.domain.order.entity.Status;
 import programmers.nbe5_7_1_8bit.domain.order_product.dto.response.OrderProductResponse;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 import programmers.nbe5_7_1_8bit.domain.order_product.entity.OrderProduct;
 import programmers.nbe5_7_1_8bit.domain.order_product.repository.OrderProductRepository;
 
@@ -23,7 +22,7 @@ public class OrderDetailResponse {
   private String address;
   private String postcode;
   private Status status;
-  private LocalDate createdAt;
+  private LocalDateTime createdAt;
   private List<OrderProductResponse> orderProducts;
 
   public static OrderDetailResponse from(Order order, OrderProductRepository repository) {
