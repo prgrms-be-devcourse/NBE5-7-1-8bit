@@ -9,11 +9,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class InquiryAnswerDto {
 
-  private Long id;
+  private Long inquiryId;
   private String answer;
 
-  public InquiryAnswerDto(Long id, String answer) {
-    this.id = id;
+  public InquiryAnswerDto(Long inquiryId, String answer) {
+    this.inquiryId = inquiryId;
     this.answer = answer;
   }
 

@@ -14,4 +14,5 @@ public interface InquiryService {
   void update(InquiryDto inquiryDto);
 
   void softDelete(Long inquiryId);
+
 }

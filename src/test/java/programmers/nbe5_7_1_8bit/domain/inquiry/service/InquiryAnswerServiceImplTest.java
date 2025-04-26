@@ -26,7 +26,7 @@ class InquiryAnswerServiceImplTest {
     String answer = "답변 내용입니다.";
 
     InquiryAnswerDto dto = new InquiryAnswerDto();
-    dto.setId(inquiryId);
+    dto.setInquiryId(inquiryId);
     dto.setAnswer(answer);
 
     Inquiry mockInquiry = Inquiry.builder().build();

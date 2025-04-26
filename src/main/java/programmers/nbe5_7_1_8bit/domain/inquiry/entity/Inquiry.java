@@ -31,7 +31,6 @@ public class Inquiry extends BaseSoftDeleteEntity {
   private String title;
   private String question;
   private String name;
-  private String password;
 
   @OneToOne(
       cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
@@ -40,16 +39,16 @@ public class Inquiry extends BaseSoftDeleteEntity {
   private InquiryAnswer inquiryAnswer;
 
   @Builder
-  public Inquiry(String title, String question, String password, String name) {
+  public Inquiry(String title, String question, String name) {
     this.title = title;
     this.question = question;
-    this.password = password;
     this.name = name;
   }
 
   public void update(InquiryDto inquiryDto) {
     this.title = inquiryDto.getTitle();
     this.question = inquiryDto.getQuestion();
+    this.name = inquiryDto.getName();
   }
 
   public void answerInquiry(InquiryAnswer inquiryAnswer) {

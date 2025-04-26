@@ -13,7 +13,7 @@ import programmers.nbe5_7_1_8bit.domain.inquiry.entity.InquiryDto;
 public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
 
   @Query(
-      "select new programmers.nbe5_7_1_8bit.domain.inquiry.entity.InquiryDto(i.title,i.question,i.inquiryAnswer.answer,i.createdAt,i.updatedAt) from Inquiry i where i.id = :id")
+      "select new programmers.nbe5_7_1_8bit.domain.inquiry.entity.InquiryDto(i.id,i.title,i.question,i.inquiryAnswer.id,i.inquiryAnswer.answer,i.createdAt,i.updatedAt) from Inquiry i left join i.inquiryAnswer ia where i.id = :id")
   InquiryDto findInquiryDtoById(@Param("id") Long id);
 
   @Query(

@@ -1,16 +1,14 @@
 package programmers.nbe5_7_1_8bit.domain.inquiry.service;
 
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import programmers.nbe5_7_1_8bit.domain.inquiry.entity.Inquiry;
 import programmers.nbe5_7_1_8bit.domain.inquiry.entity.InquiryDto;
 import programmers.nbe5_7_1_8bit.domain.inquiry.repository.InquiryRepository;
-import programmers.nbe5_7_1_8bit.domain.inquiry.utils.PasswordUtils;
+import programmers.nbe5_7_1_8bit.global.config.HibernateFilterManager;
 
 @Service
 @RequiredArgsConstructor
@@ -18,12 +16,15 @@ import programmers.nbe5_7_1_8bit.domain.inquiry.utils.PasswordUtils;
 @Slf4j
 public class InquiryServiceImpl implements InquiryService {
 
+  private final HibernateFilterManager hibernateFilterManager;
+
   private final InquiryRepository inquiryRepository;
 
   @Override
   public void save(InquiryDto inquiryDto) {
     inquiryRepository.save(
-        InquiryDto.of(inquiryDto.getTitle(), inquiryDto.getQuestion(), inquiryDto.getName(),inquiryDto.getPassword()));
+        InquiryDto.of(inquiryDto.getTitle(), inquiryDto.getQuestion(), inquiryDto.getName(),
+            inquiryDto.getPassword()));
   }
 
   @Override
@@ -33,7 +34,10 @@ public class InquiryServiceImpl implements InquiryService {
 
   @Override
   public Page<InquiryDto> findPage(int page, int offset) {
-    return inquiryRepository.findPageForManager(PageRequest.of(page, offset));
+    hibernateFilterManager.enableFilter("softDeleteFilter", "isRemoved", false);
+    Page<InquiryDto> result = inquiryRepository.findPageForManager(PageRequest.of(page, offset));
+    hibernateFilterManager.disableFilter("softDeleteFilter");
+    return result;
   }
 
   @Override
@@ -48,9 +52,4 @@ public class InquiryServiceImpl implements InquiryService {
     inquiryRepository.findById(inquiryId).ifPresent(inquiry -> inquiry.softDelete());
   }
 
-  @Override
-  public boolean checkInquiryPassword(Long inquiryId, String password) {
-    Optional<Inquiry> inquiry = inquiryRepository.findById(inquiryId);
-    return inquiry.isPresent() && PasswordUtils.checkPw(inquiry.get().getPassword(), password);
-  }
 }
