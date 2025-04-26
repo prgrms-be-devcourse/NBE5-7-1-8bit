@@ -1,6 +1,6 @@
 package programmers.nbe5_7_1_8bit.domain.inquiry.entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,46 +16,42 @@ public class InquiryDto {
   private Long inquiryAnswerId;
   private String answer;
   private String name;
-  private String password;
-  private LocalDate createdAt;
-  private LocalDate updatedAt;
+  private LocalDateTime createdAt;
+  private LocalDateTime updatedAt;
 
   // inquiry 입력
-  public InquiryDto(String title, String question) {
+  public InquiryDto(String title, String question, String name) {
     this.title = title;
     this.question = question;
+    this.name = name;
   }
 
-
   // inquiry 조회
-  public InquiryDto(Long inquiryId, String title, String question, Long inquiryAnswerId,
+  public InquiryDto(Long inquiryId, String title, String question,
+      String name,
       String answer,
-      LocalDate createdAt,
-      LocalDate updatedAt) {
+      LocalDateTime createdAt,
+      LocalDateTime updatedAt) {
     this.inquiryId = inquiryId;
     this.title = title;
     this.question = question;
     this.answer = answer;
+    this.name = name;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
 
   // inquiry 테이블 조회
-  public InquiryDto(Long inquiryId, String title, LocalDate createdAt, LocalDate updatedAt) {
+  public InquiryDto(Long inquiryId, String title, String name, LocalDateTime createdAt,
+      LocalDateTime updatedAt) {
     this.inquiryId = inquiryId;
     this.title = title;
+    this.name = name;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
 
-  // inquiry 수정
-  public InquiryDto(Long inquiryId, String title, String question) {
-    this.inquiryId = inquiryId;
-    this.title = title;
-    this.question = question;
-  }
-
-  public static Inquiry of(String title, String question, String name, String password) {
+  public static Inquiry of(String title, String question, String name) {
     return Inquiry.builder().title(title).question(question).name(name).build();
   }
 }

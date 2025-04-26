@@ -58,23 +58,4 @@ public class InquiryController {
     inquiryAnswerService.save(inquiryAnswerDto);
     return "redirect:/api/inq?inquiryId=" + inquiryAnswerDto.getInquiryId();
   }
-
-  // todo - user
-//  @PostMapping("/new")
-//  String saveInquiry(@ModelAttribute InquiryDto inquiryDto) {
-//    inquiryService.save(inquiryDto);
-//    return "redirect:/api/inq/page";
-//  }
-//
-//  @GetMapping("/update/{id}")
-//  String viewUpdateInquiry(@PathVariable("id") Long id, Model model) {
-//    model.addAttribute("inquiry", inquiryService.findById(id));
-//    return "/admin/inquiry/inquiry-update-form";
-//  }
-//
-//  @PutMapping("/update")
-//  String updateInquiry(@RequestParam InquiryDto inquiryDto) {
-//    inquiryService.update(inquiryDto);
-//    return "redirect:/inq/" + inquiryDto.getInquiryId();
-//  }
 }

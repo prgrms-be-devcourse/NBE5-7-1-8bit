@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import programmers.nbe5_7_1_8bit.domain.inquiry.entity.InquiryDto;
@@ -23,8 +25,7 @@ public class InquiryServiceImpl implements InquiryService {
   @Override
   public void save(InquiryDto inquiryDto) {
     inquiryRepository.save(
-        InquiryDto.of(inquiryDto.getTitle(), inquiryDto.getQuestion(), inquiryDto.getName(),
-            inquiryDto.getPassword()));
+        InquiryDto.of(inquiryDto.getTitle(), inquiryDto.getQuestion(), inquiryDto.getName()));
   }
 
   @Override
@@ -35,7 +36,8 @@ public class InquiryServiceImpl implements InquiryService {
   @Override
   public Page<InquiryDto> findPage(int page, int offset) {
     hibernateFilterManager.enableFilter("softDeleteFilter", "isRemoved", false);
-    Page<InquiryDto> result = inquiryRepository.findPageForManager(PageRequest.of(page, offset));
+    Page<InquiryDto> result = inquiryRepository.findPageForManager(PageRequest.of(page, offset,
+        Sort.by(Direction.DESC,"createdAt")));
     hibernateFilterManager.disableFilter("softDeleteFilter");
     return result;
   }

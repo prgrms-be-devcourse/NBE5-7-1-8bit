@@ -1,12 +1,26 @@
 package programmers.nbe5_7_1_8bit.domain.order.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import programmers.nbe5_7_1_8bit.domain.order.dto.request.OrderRequest;
@@ -14,18 +28,6 @@ import programmers.nbe5_7_1_8bit.domain.order.dto.response.OrderDetailResponse;
 import programmers.nbe5_7_1_8bit.domain.order.dto.response.OrderListResponse;
 import programmers.nbe5_7_1_8bit.domain.order.entity.Status;
 import programmers.nbe5_7_1_8bit.domain.order.service.OrderService;
-
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collections;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(OrderController.class)
 public class OrderControllerTests {
@@ -56,7 +58,7 @@ public class OrderControllerTests {
         "test@example.com",
         1L,
         Status.BEFORE_SHIPPING,
-        LocalDate.now(),
+        LocalDateTime.now(),
         Collections.emptyList()
     );
 
@@ -65,7 +67,7 @@ public class OrderControllerTests {
         "addressTest",
         "12345",
         Status.BEFORE_SHIPPING,
-        LocalDate.now(),
+        LocalDateTime.now(),
         Collections.emptyList()
     );
   }
@@ -119,7 +121,7 @@ public class OrderControllerTests {
         "test@example.com",
         1L,
         Status.BEFORE_SHIPPING,
-        LocalDate.now(),
+        LocalDateTime.now(),
         Collections.emptyList()
     );
 
@@ -127,7 +129,7 @@ public class OrderControllerTests {
         "test@example.com",
         2L,
         Status.SHIPPING,
-        LocalDate.now(),
+        LocalDateTime.now(),
         Collections.emptyList()
     );
 

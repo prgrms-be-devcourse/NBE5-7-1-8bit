@@ -1,6 +1,5 @@
 package programmers.nbe5_7_1_8bit.domain.product.dto;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,8 +16,8 @@ public class ProductResponseDto {
   private int price;
   private int stock;
   private String imagePath;
-  private LocalDate createdAt;
-  private LocalDate modifiedAt;
+  private LocalDateTime createdAt;
+  private LocalDateTime modifiedAt;
 
   public static ProductResponseDto from(Product product) {
     return ProductResponseDto.builder()

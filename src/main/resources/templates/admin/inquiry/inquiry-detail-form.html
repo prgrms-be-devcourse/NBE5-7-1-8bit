@@ -19,11 +19,11 @@
             </tr>
             <tr>
               <th>등록일</th>
-              <td th:text="*{createdAt}">2023-04-25 10:00</td>
+              <td th:text="${#temporals.format(inquiry.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
             </tr>
             <tr>
               <th>수정일</th>
-              <td th:text="*{updatedAt}">2023-04-25 10:00</td>
+              <td th:text="${#temporals.format(inquiry.updatedAt, 'yyyy-MM-dd HH:mm')}"></td>
             </tr>
             <tr>
               <th>답변</th>
@@ -36,7 +36,7 @@
                   <input type="hidden" id="inquiryId" name="inquiryId" th:value="*{inquiryId}"/>
                   <textarea id="answer" name="answer" rows="5"
                             class="form-control mb-2"
-                            required th:text="*{answer}"></textarea>
+                            required th:value="*{answer}"></textarea>
                   <div class="d-flex justify-content-end">
                     <button type="button" class="btn btn-warning" th:onclick="'deleteInquiry('+*{inquiryId}+')'">문의 삭제</button>
                     <button type="submit" class="btn btn-primary">답글 전송</button>
