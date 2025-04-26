@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import programmers.nbe5_7_1_8bit.domain.manager.entity.AdminOnly;
 import programmers.nbe5_7_1_8bit.domain.manager.service.AuthService;
 import programmers.nbe5_7_1_8bit.domain.manager.utils.SessionUtils;
+import programmers.nbe5_7_1_8bit.domain.order.dto.request.OrderUpdateRequest;
 import programmers.nbe5_7_1_8bit.domain.order.dto.response.OrderDetailResponse;
 import programmers.nbe5_7_1_8bit.domain.order.dto.response.OrderListResponse;
+import programmers.nbe5_7_1_8bit.domain.order.entity.Status;
 import programmers.nbe5_7_1_8bit.domain.order.service.OrderService;
 
 @Controller
@@ -89,4 +92,29 @@ public class ManagerController {
     model.addAttribute("order", detail);
     return "admin/orders/detail";
   }
+
+  @GetMapping("/orders/{orderId}/update")
+  public String editOrderForm(@PathVariable Long orderId, Model model) {
+    OrderDetailResponse order = orderService.getOrderDetailById(orderId);
+    model.addAttribute("order", order);
+    model.addAttribute("orderStatuses", Status.values());
+    return "admin/orders/form";
+  }
+
+  @PostMapping("/orders/{orderId}/update")
+  public String updateOrder(@PathVariable Long orderId,
+      @ModelAttribute OrderUpdateRequest request,
+      RedirectAttributes redirectAttributes) {
+    orderService.adminUpdateOrder(orderId, request);
+    redirectAttributes.addFlashAttribute("message", "주문이 성공적으로 수정되었습니다.");
+    return "redirect:/api/admin/orders";
+  }
+
+  @PostMapping("orders/{orderId}/cancel")
+  public String cancelProduct(@PathVariable Long orderId, RedirectAttributes redirectAttributes) {
+    orderService.adminCancelOrder(orderId);
+    redirectAttributes.addFlashAttribute("message", "주문이 성공적으로 삭제되었습니다.");
+    return "redirect:/api/admin/orders";
+  }
+
 }

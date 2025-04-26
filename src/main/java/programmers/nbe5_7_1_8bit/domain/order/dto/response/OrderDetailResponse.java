@@ -20,6 +20,8 @@ import programmers.nbe5_7_1_8bit.domain.order_product.repository.OrderProductRep
 @NoArgsConstructor
 public class OrderDetailResponse {
 
+  private Long id;
+  private String email;
   private String address;
   private String postcode;
   private Status status;
@@ -34,6 +36,8 @@ public class OrderDetailResponse {
         .collect(Collectors.toList());
 
     return new OrderDetailResponse(
+        order.getId(),
+        order.getMember().getEmail(),
         order.getAddress(),
         order.getPostcode(),
         order.getStatus(),

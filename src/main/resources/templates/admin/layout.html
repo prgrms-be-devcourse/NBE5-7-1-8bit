@@ -55,14 +55,7 @@
       <div class="sidebar-sticky">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link" th:classappend="${currentMenu == 'dashboard' ? 'active' : ''}"
-               href="/admin">
-              대시보드
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" th:classappend="${currentMenu == 'products' ? 'active' : ''}"
-               href="/api/products">
+            <a class="nav-link" th:classappend="${currentMenu == 'products' ? 'active' : ''}" href="/api/products">
               상품 관리
             </a>
           </li>
@@ -70,12 +63,6 @@
             <a class="nav-link" th:classappend="${currentMenu == 'orders' ? 'active' : ''}"
                href="api/admin/orders">
               주문 관리
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" th:classappend="${currentMenu == 'members' ? 'active' : ''}"
-               href="/admin/members">
-              회원 관리
             </a>
           </li>
           <li class="nav-item">
