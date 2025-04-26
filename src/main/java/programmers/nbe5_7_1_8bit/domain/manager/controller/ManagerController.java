@@ -74,4 +74,6 @@ public class ManagerController {
     model.addAttribute("order", detail);
     return "admin/orders/detail";
   }
+
+
 }

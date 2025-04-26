@@ -25,7 +25,7 @@
         <td th:text="${#temporals.format(order.createdAt, 'yyyy-MM-dd HH:mm')}">2023-04-25 10:00</td>
         <td>
           <div class="btn-group btn-group-sm">
-            <a th:href="@{'/admin/orders/' + ${order.id}}" class="btn btn-outline-secondary">상세</a>
+            <a th:href="@{'/api/admin/orders/' + ${order.id}}" class="btn btn-outline-secondary">상세</a>
           </div>
         </td>
       </tr>
