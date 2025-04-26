@@ -166,4 +166,17 @@ public class OrderService {
 
     return orderProducts;
   }
+
+  public List<OrderListResponse> getAllOrders() {
+    List<Order> orders = orderRepository.findAll();
+    return orders.stream()
+        .map(order -> OrderListResponse.from(order, orderProductRepository))
+        .collect(Collectors.toList());
+  }
+
+  public OrderDetailResponse getOrderDetailById(Long orderId) {
+    Order order = orderRepository.findById(orderId)
+        .orElseThrow(() -> new NoSuchElementException("주문 없음"));
+    return OrderDetailResponse.from(order, orderProductRepository);
+  }
 }

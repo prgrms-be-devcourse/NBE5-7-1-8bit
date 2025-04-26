@@ -11,7 +11,7 @@
 <div class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-md">
   <h2 class="text-2xl font-bold mb-6 text-center">관리자 인증</h2>
 
-  <form th:action="@{/manager/login}" method="post" class="space-y-4">
+  <form th:action="@{/api/admin/login}" method="post" class="space-y-4">
     <div>
       <label for="password" class="block font-semibold mb-1">비밀번호</label>
       <input type="password" id="password" name="password"

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: html(content=~{::content}, title='상품 목록', currentMenu='products')}">
+<body>
+<th:block th:fragment="content">
+  <div
+      class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <h1 class="h2">문의 목록</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <a href="/api/products/new" class="btn btn-sm btn-outline-secondary">
+        + 상품 등록
+      </a>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-sm">
+      <thead>
+      <tr>
+        <th>번호</th>
+        <th>제목</th>
+        <th>이메일</th>
+        <th>수정일</th>
+        <th>생성일</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="inquiry, stat : ${inquires}"
+          th:onclick="'viewInquiry(' + *{inquiry.inquiryId} +')'" style="cursor:pointer;">
+        <td th:text="${stat.index}"></td>
+        <td th:text="${inquiry.title}"></td>
+        <td th:text="${inquiry.getName}"></td>
+        <td th:text="${inquiry.updatedAt}"></td>
+        <td th:text="${inquiry.createdAt}"></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    function viewInquiry(inquiryId) {
+      window.location.href = '/api/inq?inquiryId=' + inquiryId;
+    }
+  </script>
+</th:block>
+</body>
+</html>

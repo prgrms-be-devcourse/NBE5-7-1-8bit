@@ -20,7 +20,7 @@ import programmers.nbe5_7_1_8bit.domain.inquiry.service.InquiryService;
 import programmers.nbe5_7_1_8bit.domain.manager.entity.AdminOnly;
 
 @Controller
-@RequestMapping("dashboard/inq")
+@RequestMapping("/api/inq")
 @RequiredArgsConstructor
 public class InquiryController {
 
@@ -37,14 +37,14 @@ public class InquiryController {
     model.addAttribute("offset", offset);
 
     model.addAttribute("inquires", inquiryService.findPage(page, offset));
-    return "inquiry-list-form";
+    return "/admin/inquiry/inquiry-list-form";
   }
 
   @GetMapping
   @AdminOnly
   String findInquiry(@RequestParam("inquiryId") Long inquiryId, Model model) {
     model.addAttribute("inquiry", inquiryService.findById(inquiryId));
-    return "inquiry-detail-form";
+    return "/admin/inquiry/inquiry-detail-form";
   }
 
   @DeleteMapping
@@ -59,25 +59,25 @@ public class InquiryController {
   @AdminOnly
   String saveInquiryAnswer(@ModelAttribute InquiryAnswerDto inquiryAnswerDto) {
     inquiryAnswerService.save(inquiryAnswerDto);
-    return "redirect:/dashboard/inq?inquiryId=" + inquiryAnswerDto.getInquiryId();
+    return "redirect:/api/inq?inquiryId=" + inquiryAnswerDto.getInquiryId();
   }
 
   // todo - user
-  @PostMapping("/new")
-  String saveInquiry(@ModelAttribute InquiryDto inquiryDto) {
-    inquiryService.save(inquiryDto);
-    return "redirect:/inq/page";
-  }
-
-  @GetMapping("/update/{id}")
-  String viewUpdateInquiry(@PathVariable("id") Long id, Model model) {
-    model.addAttribute("inquiry", inquiryService.findById(id));
-    return "inquiry-update-form";
-  }
-
-  @PutMapping("/update")
-  String updateInquiry(@RequestParam InquiryDto inquiryDto) {
-    inquiryService.update(inquiryDto);
-    return "redirect:/inq/" + inquiryDto.getInquiryId();
-  }
+//  @PostMapping("/new")
+//  String saveInquiry(@ModelAttribute InquiryDto inquiryDto) {
+//    inquiryService.save(inquiryDto);
+//    return "redirect:/api/inq/page";
+//  }
+//
+//  @GetMapping("/update/{id}")
+//  String viewUpdateInquiry(@PathVariable("id") Long id, Model model) {
+//    model.addAttribute("inquiry", inquiryService.findById(id));
+//    return "/admin/inquiry/inquiry-update-form";
+//  }
+//
+//  @PutMapping("/update")
+//  String updateInquiry(@RequestParam InquiryDto inquiryDto) {
+//    inquiryService.update(inquiryDto);
+//    return "redirect:/inq/" + inquiryDto.getInquiryId();
+//  }
 }
