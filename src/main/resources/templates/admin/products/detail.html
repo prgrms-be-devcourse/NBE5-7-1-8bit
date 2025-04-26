@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{admin/layout :: html(content=~{::content}, title='상품 상세', currentMenu='products')}">
+<body>
+<th:block th:fragment="content">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <h1 class="h2">상품 상세</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group me-2">
+        <a th:href="@{'/api/products/' + ${product.id} + '/edit'}" class="btn btn-sm btn-outline-secondary">수정</a>
+        <button type="button" class="btn btn-sm btn-outline-danger" th:onclick="'deleteProduct(' + ${product.id} + ')'">삭제</button>
+      </div>
+      <a href="/api/products" class="btn btn-sm btn-outline-primary">목록으로</a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card mb-4">
+        <div class="text-center p-3">
+          <img th:if="${product.imagePath}" th:src="@{'/api/products/' + ${product.id} + '/image'}"
+               class="card-img-top" style="max-height: 300px; object-fit: contain;" alt="상품 이미지">
+          <div th:unless="${product.imagePath}" class="bg-light d-flex align-items-center justify-content-center"
+               style="height: 300px;">
+            <span class="text-muted">이미지 없음</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title" th:text="${product.name}">상품명</h5>
+          <table class="table">
+            <tr>
+              <th style="width: 120px">상품 ID</th>
+              <td th:text="${product.id}">1</td>
+            </tr>
+            <tr>
+              <th>가격</th>
+              <td th:text="${#numbers.formatInteger(product.price, 0, 'COMMA') + '원'}">10,000원</td>
+            </tr>
+            <tr>
+              <th>재고</th>
+              <td>
+                <span th:text="${product.stock}">100</span>
+                <span th:if="${product.stock <= 10}" class="badge bg-warning text-dark">재고 부족</span>
+              </td>
+            </tr>
+            <tr>
+              <th>등록일</th>
+              <td th:text="${#temporals.format(product.createdAt, 'yyyy-MM-dd HH:mm')}">2023-04-25 10:00</td>
+            </tr>
+            <tr>
+              <th>수정일</th>
+              <td th:text="${#temporals.format(product.modifiedAt, 'yyyy-MM-dd HH:mm')}">2023-04-25 10:00</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 삭제 확인 모달 -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">상품 삭제</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          상품을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+          <form id="deleteForm" method="post">
+            <button type="submit" class="btn btn-danger">삭제</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function deleteProduct(productId) {
+      const modal = document.getElementById('deleteModal');
+      const bsModal = new bootstrap.Modal(modal);
+      const form = document.getElementById('deleteForm');
+      form.action = `/api/products/${productId}/delete`;
+      bsModal.show();
+    }
+  </script>
+</th:block>
+</body>
+</html>
