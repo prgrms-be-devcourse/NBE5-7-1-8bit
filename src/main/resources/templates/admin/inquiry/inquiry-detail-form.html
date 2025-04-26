@@ -1,83 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>문의 상세</title>
-  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.18/dist/full.css" rel="stylesheet"/>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-base-100 p-6">
-
-<div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-md" th:object="${inquiry}">
-
-  <h2 class="text-2xl font-bold mb-6">문의 상세</h2>
-
-  <div class="mb-4">
-    <label class="font-semibold">제목:</label>
-    <p class="mt-1" th:text="*{title}">제목</p>
-  </div>
-
-  <div class="mb-4">
-    <label class="font-semibold">이름:</label>
-    <p class="mt-1" th:text="*{name}">이름</p>
-  </div>
-
-  <div class="mb-4">
-    <label class="font-semibold">질문:</label>
-    <p class="mt-1 whitespace-pre-wrap" th:text="*{question}">질문</p>
-  </div>
-
-  <div class="mb-4" th:if="*{answer != null}">
-    <label class="font-semibold">답글:</label>
-    <p class="mt-1 whitespace-pre-wrap" th:text="*{answer}">답글</p>
-  </div>
-
-
-  <!-- 답글 작성 폼 (answer가 null일 때만 보이게) -->
-  <div class="mt-10">
-    <form th:action="@{/dashboard/inq/ans}" method="post" class="space-y-4">
-      <input type="hidden" name="inquiryId" th:value="*{inquiryId}"/>
-      <div>
-        <label for="answer" class="block font-semibold">답글 수정 및 생성:</label>
-        <textarea id="answer" name="answer" rows="5" class="textarea textarea-bordered w-full"
-                  required th:value="*{answer}"></textarea>
-      </div>
-
-      <div>
-        <button type="submit" class="btn btn-primary">답글 전송</button>
-      </div>
-    </form>
-  </div>
-
-
-  <div class="flex gap-4 mt-6">
-
-  </div>
-
-</div>
-
-<script>
-
-</script>
-
-</body>
-</html>
-
-----
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{admin/layout :: html(content=~{::content}, title='문의', currentMenu='products')}">
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: html(content=~{::content}, title='문의', currentMenu='inquiry')}">
 <body>
 <th:block th:fragment="content" th:object="${inquiry}">
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-    <h1 class="h2"></h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-      <div class="btn-group me-2">
-        <button type="button" class="btn btn-sm btn-outline-danger" th:onclick="|deleteInquiry(*{inquiryId})|">삭제</button>
-      </div>
-      <a href="/api/inq/page" class="btn btn-sm btn-outline-primary">목록으로</a>
-    </div>
-  </div>
-
   <div class="row">
     <div class="col-md-8">
       <div class="card">
@@ -86,7 +11,7 @@
           <table class="table">
             <tr>
               <th style="width: 120px">이름</th>
-              <td th:text="*{name}">1</td>ı
+              <td th:text="*{name}">1</td>
             </tr>
             <tr>
               <th style="width: 120px">질문</th>
@@ -94,48 +19,32 @@
             </tr>
             <tr>
               <th>등록일</th>
-              <td th:text="${#temporals.format(*{createdAt}, 'yyyy-MM-dd HH:mm')}">2023-04-25 10:00</td>
+              <td th:text="*{createdAt}">2023-04-25 10:00</td>
             </tr>
             <tr>
               <th>수정일</th>
-              <td th:text="${#temporals.format(*{updatedAt}, 'yyyy-MM-dd HH:mm')}">2023-04-25 10:00</td>
+              <td th:text="*{updatedAt}">2023-04-25 10:00</td>
             </tr>
             <tr>
-              <form th:action="@{/dashboard/inq/ans}" method="post" class="space-y-4">
-                <input type="hidden" name="inquiryId" th:value="*{inquiryId}"/>
-                <div>
-                  <label for="answer" class="block font-semibold">답글 수정 및 생성:</label>
-                  <textarea id="answer" name="answer" rows="5" class="textarea textarea-bordered w-full"
-                            required th:value="*{answer}"></textarea>
-                </div>
-
-                <div>
-                  <button type="submit" class="btn btn-primary">답글 전송</button>
-                </div>
-              </form>
+              <th>답변</th>
+              <td th:text="*{answer}">2023-04-25 10:00</td>
+            </tr>
+            <tr>
+              <th></th>
+              <td>
+                <form th:action="@{/api/inq/ans}" method="post" class="d-flex flex-column">
+                  <input type="hidden" id="inquiryId" name="inquiryId" th:value="*{inquiryId}"/>
+                  <textarea id="answer" name="answer" rows="5"
+                            class="form-control mb-2"
+                            required th:text="*{answer}"></textarea>
+                  <div class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-warning" th:onclick="'deleteInquiry('+*{inquiryId}+')'">문의 삭제</button>
+                    <button type="submit" class="btn btn-primary">답글 전송</button>
+                  </div>
+                </form>
+              </td>
             </tr>
           </table>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 삭제 확인 모달 -->
-  <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">상품 삭제</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          상품을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-          <form id="deleteForm" method="post">
-            <button type="submit" class="btn btn-danger">삭제</button>
-          </form>
         </div>
       </div>
     </div>
@@ -147,7 +56,7 @@
         return;
       }
 
-      fetch(`/dashboard/inq?inquiryId=${inquiryId}`, {
+      fetch(`/api/inq?inquiryId=${inquiryId}`, {
         method: 'DELETE'
       })
       .then(res => {
@@ -156,7 +65,7 @@
         }
         if (res.status == 200) {
           alert("삭제되었습니다.");
-          window.location.href = "/dashboard/inq/page";
+          window.location.href = "/api/inq/page";
           return;
         }
         alert("삭제에 실패했습니다: ");

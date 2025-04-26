@@ -15,7 +15,8 @@ public class AuthServiceImpl implements AuthService {
 
   @Override
   public boolean login(String password) {
-    return PasswordUtils.checkPw(password, managerRepository.findById(0L).get().getPassword());
+    String encryptPassword = managerRepository.findById(0L).map(it -> it.getPassword()).orElseThrow();
+    return PasswordUtils.checkPw(password, encryptPassword);
   }
 
   @Override
