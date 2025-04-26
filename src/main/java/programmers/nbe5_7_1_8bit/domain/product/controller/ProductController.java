@@ -32,6 +32,27 @@ public class ProductController {
 
   private final ProductService productService;
 
+  @ResponseBody
+  @PostMapping("1")
+  public ResponseEntity<ProductResponseDto> createProduct(@RequestBody ProductRequestDto request) {
+    ProductResponseDto product = productService.createProduct(request);
+    return ResponseEntity.status(201).body(product);
+  }
+
+  @GetMapping
+  public String listProducts(Model model) {
+    List<ProductResponseDto> products = productService.memberGetProductList();
+    model.addAttribute("products", products);
+    return "admin/products/list";
+  }
+
+  @GetMapping("/{productId}/detail")
+  public String getProduct(@PathVariable Long productId, Model model) {
+    ProductResponseDto product = productService.memberGetProduct(productId);
+    model.addAttribute("product", product);
+    return "admin/products/detail";
+  }
+
   @GetMapping("/new")
   public String createProductForm(Model model) {
     model.addAttribute("product", new ProductRequestDto());
@@ -39,10 +60,19 @@ public class ProductController {
   }
 
   @PostMapping
-  public String createProduct(@ModelAttribute ProductRequestDto request, RedirectAttributes redirectAttributes) {
+  public String createProduct(
+      @ModelAttribute ProductRequestDto request,
+      @RequestParam(value = "file", required = false) MultipartFile file,
+      RedirectAttributes redirectAttributes) throws IOException {
+
     ProductResponseDto product = productService.createProduct(request);
+
+    if (file != null && !file.isEmpty()) {
+      productService.uploadImage(product.getId(), file);
+    }
+
     redirectAttributes.addFlashAttribute("message", "상품이 성공적으로 등록되었습니다.");
-    return "redirect:/admin/products";
+    return "redirect:/api/products";
   }
 
   @GetMapping("/{productId}")
@@ -60,7 +90,7 @@ public class ProductController {
 
   @ResponseBody
   @GetMapping("/member/{productId}")
-  public ResponseEntity<ProductResponseDto> memberGetProduct(@PathVariable Long productId){
+  public ResponseEntity<ProductResponseDto> memberGetProduct(@PathVariable Long productId) {
     ProductResponseDto product = productService.memberGetProduct(productId);
     return ResponseEntity.ok(product);
   }
@@ -74,17 +104,18 @@ public class ProductController {
 
 
   @PostMapping("/{productId}/edit")
-  public String editProduct(@PathVariable Long productId, @ModelAttribute ProductRequestDto updateRequest, RedirectAttributes redirectAttributes) {
+  public String editProduct(@PathVariable Long productId,
+      @ModelAttribute ProductRequestDto updateRequest, RedirectAttributes redirectAttributes) {
     productService.editProduct(productId, updateRequest);
     redirectAttributes.addFlashAttribute("message", "상품이 성공적으로 수정되었습니다.");
-    return "redirect:/admin/products";
+    return "redirect:/api/products";
   }
 
   @PostMapping("/{productId}/delete")
   public String deleteProduct(@PathVariable Long productId, RedirectAttributes redirectAttributes) {
     productService.deleteProduct(productId);
     redirectAttributes.addFlashAttribute("message", "상품이 성공적으로 삭제되었습니다.");
-    return "redirect:/admin/products";
+    return "redirect:/api/products";
   }
 
   @GetMapping("/{productId}/image/form")
@@ -95,10 +126,12 @@ public class ProductController {
   }
 
   @PostMapping("/{productId}/image")
-  public ResponseEntity<String> uploadImage(@PathVariable Long productId, @RequestParam("file")MultipartFile file)
-      throws IOException {
-    String fileName = productService.uploadImage(productId, file);
-    return ResponseEntity.ok(fileName);
+  public String uploadImage(@PathVariable Long productId,
+      @RequestParam("file") MultipartFile file,
+      RedirectAttributes redirectAttributes) throws IOException {
+    productService.uploadImage(productId, file);
+    redirectAttributes.addFlashAttribute("message", "이미지가 성공적으로 업로드되었습니다.");
+    return "redirect:/api/products/" + productId + "/edit";
   }
 
   @GetMapping("/{productId}/image")
@@ -106,10 +139,17 @@ public class ProductController {
     Resource resource = productService.loadImage(productId);
 
     return ResponseEntity.ok()
-        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+        .header(HttpHeaders.CONTENT_DISPOSITION,
+            "inline; filename=\"" + resource.getFilename() + "\"")
         .contentType(MediaType.IMAGE_JPEG)
         .body(resource);
   }
 
+  @PostMapping("/{productId}/image/delete")
+  public String deleteImage(@PathVariable Long productId, RedirectAttributes redirectAttributes) throws IOException {
+    productService.deleteImage(productId);
+    redirectAttributes.addFlashAttribute("message", "이미지가 성공적으로 삭제되었습니다.");
+    return "redirect:/api/products/" + productId + "/edit";
+  }
 
 }

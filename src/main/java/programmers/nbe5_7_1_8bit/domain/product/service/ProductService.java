@@ -85,6 +85,10 @@ public class ProductService {
     Product product = productRepository.findById(productId)
         .orElseThrow(ProductNotFoundException::new);
 
+    if (product.getImagePath() != null && !product.getImagePath().isEmpty()) {
+      deleteImageFile(product.getImagePath());
+    }
+
     Path uploadPath = Paths.get(UPLOAD_DIRECTORY);
     if (!Files.exists(uploadPath)) {
       Files.createDirectories(uploadPath);
@@ -127,6 +131,18 @@ public class ProductService {
     return resource;
   }
 
+  @Transactional
+  public void deleteImage(Long productId) throws IOException {
+    Product product = productRepository.findById(productId)
+        .orElseThrow(ProductNotFoundException::new);
+
+    if (product.getImagePath() != null && !product.getImagePath().isEmpty()) {
+      deleteImageFile(product.getImagePath());
+      product.setImagePath(null);
+    }
+  }
+
+
 
   private void validateNotRemoved(Product product) {
     if(product.isRemoved()) {
@@ -147,4 +163,10 @@ public class ProductService {
 
     return productResponseDtoList;
   }
+
+  private void deleteImageFile(String imagePath) throws IOException {
+    Path path = Paths.get(UPLOAD_DIRECTORY).resolve(imagePath);
+    Files.deleteIfExists(path);
+  }
+
 }
