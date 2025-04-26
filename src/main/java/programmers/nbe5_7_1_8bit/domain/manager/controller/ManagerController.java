@@ -56,16 +56,9 @@ public class ManagerController {
     return ResponseEntity.ok().build();
   }
 
-  @GetMapping("/dashboard")
-  @AdminOnly
-  String dashboard() {
-    return "manager-dashboard";
-  }
-
   @GetMapping("/changePassword")
   @AdminOnly
-  String viewChangePassword(Model model) {
-//    model.addAttribute("password", "");
+  String viewChangePassword() {
     return "admin/auth/admin-change-password";
   }
 
