@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{admin/layout :: html(content=~{::content}, title='주문 수정', currentMenu='orders')}">
+<body>
+<th:block th:fragment="content">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <h1 class="h2">주문 수정</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <a href="/api/admin/orders" class="btn btn-sm btn-outline-secondary">목록으로</a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body">
+          <form th:action="@{'/api/admin/orders/' + ${order.id} + '/update'}" method="post">
+
+            <div class="mb-3">
+              <label for="email" class="form-label">이메일 *</label>
+              <input type="email" class="form-control" id="email" name="email"
+                     th:value="${order.email}" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="address" class="form-label">주소 *</label>
+              <input type="text" class="form-control" id="address" name="address"
+                     th:value="${order.address}" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="status" class="form-label">주문 상태 *</label>
+              <select class="form-select" id="status" name="status" required>
+                <option th:each="status : ${orderStatuses}"
+                        th:value="${status}"
+                        th:selected="${status == order.status}"
+                        th:text="${status}">결제 완료</option>
+              </select>
+            </div>
+
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary">저장</button>
+              <a href="/api/admin/orders" class="btn btn-secondary">취소</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</th:block>
+</body>
+</html>

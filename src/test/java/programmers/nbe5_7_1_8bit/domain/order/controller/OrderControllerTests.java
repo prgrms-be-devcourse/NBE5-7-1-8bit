@@ -61,6 +61,7 @@ public class OrderControllerTests {
     );
 
     orderDetailResponse = new OrderDetailResponse(
+        1L,
         "addressTest",
         "12345",
         Status.BEFORE_SHIPPING,
