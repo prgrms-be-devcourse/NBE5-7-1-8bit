@@ -6,7 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import programmers.nbe5_7_1_8bit.domain.inquiry.entity.InquiryAnswerDto;
 import programmers.nbe5_7_1_8bit.domain.inquiry.repository.InquiryAnswerRepository;
 import programmers.nbe5_7_1_8bit.domain.inquiry.repository.InquiryRepository;
-import programmers.nbe5_7_1_8bit.global.exception.IllegalInquiryIdException;
+import programmers.nbe5_7_1_8bit.global.exception.CustomException;
+import programmers.nbe5_7_1_8bit.global.exception.ExceptionMessage;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +24,7 @@ public class InquiryAnswerServiceImpl implements InquiryAnswerService {
         .ifPresentOrElse(
             inquiry -> inquiry.answerInquiry(InquiryAnswerDto.of(inquiryAnswerDto.getAnswer())),
             () -> {
-              throw new IllegalInquiryIdException();
+              throw new CustomException(ExceptionMessage.ILLEGAL_INQUIRY_ID);
             });
   }
 

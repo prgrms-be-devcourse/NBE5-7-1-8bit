@@ -17,7 +17,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @FilterDef(
     name = "softDeleteFilter",
     parameters = @ParamDef(name = "isRemoved", type = Boolean.class))
-public class BaseSoftDeleteEntity {
+public abstract class BaseSoftDeleteEntity {
 
   @CreatedDate
   @Column(name = "created_at", updatable = false)

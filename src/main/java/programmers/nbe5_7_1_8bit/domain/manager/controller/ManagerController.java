@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,7 +51,7 @@ public class ManagerController {
   @GetMapping("/logout")
   @AdminOnly
   @ResponseBody
-  ResponseEntity logout(HttpServletResponse response, HttpSession session) {
+  ResponseEntity<Void> logout(HttpServletResponse response, HttpSession session) {
     sessionUtils.removeSessionAuth(response, session);
     return ResponseEntity.ok().build();
   }
@@ -59,6 +60,20 @@ public class ManagerController {
   @AdminOnly
   String dashboard() {
     return "manager-dashboard";
+  }
+
+  @GetMapping("/changePassword")
+  @AdminOnly
+  String viewChangePassword(Model model) {
+//    model.addAttribute("password", "");
+    return "admin/auth/admin-change-password";
+  }
+
+  @PostMapping("/changePassword")
+  @AdminOnly
+  String changePassword(@ModelAttribute("password") String password) {
+    authService.changePassword(password);
+    return "redirect:/api/admin/login";
   }
 
   @GetMapping("/orders")
