@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import programmers.nbe5_7_1_8bit.global.common.BaseEntity;
 
 @Entity
@@ -23,6 +24,7 @@ public class Member extends BaseEntity {
   @Column(nullable = false)
   private Long Id;
 
+  @Setter
   @Column(nullable = false, length = 100)
   private String email;
 

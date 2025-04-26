@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{admin/layout :: html(content=~{::content}, title='주문 상세', currentMenu='orders')}">
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: html(content=~{::content}, title='주문 상세', currentMenu='orders')}">
 <body>
 <th:block th:fragment="content">
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
     <h1 class="h2">주문 상세</h1>
-    <a href="api/admin/orders" class="btn btn-sm btn-outline-primary">목록으로</a>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group me-2">
+        <a th:href="@{'/api/admin/orders/' + ${order.id} + '/update'}" class="btn btn-sm btn-outline-secondary">수정</a>
+        <button type="button" class="btn btn-sm btn-outline-danger" th:onclick="'deleteOrder(' + ${order.id} + ')'">삭제</button>
+      </div>
+      <a href="/api/admin/orders" class="btn btn-sm btn-outline-primary">목록으로</a>
+    </div>
   </div>
 
   <div class="row">
@@ -37,19 +44,42 @@
         </div>
       </div>
     </div>
+
     <div class="col-md-6">
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">주문 상품</h5>
-          <ul>
-            <li th:each="orderProduct : ${order.orderProducts}">
-              <span th:text="${orderProduct.productName}">상품명</span> - <span th:text="${#numbers.formatInteger(orderProduct.price, 0, 'COMMA')}">10,000원</span>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" th:each="orderProduct : ${order.orderProducts}">
+              <span th:text="${orderProduct.productName}">상품명</span> -
+              <span th:text="${#numbers.formatInteger(orderProduct.price, 0, 'COMMA') + '원'}">10,000원</span> -
+              <span th:text="'수량: ' + ${orderProduct.quantity} + '개'">수량: 1개</span>
             </li>
           </ul>
         </div>
       </div>
     </div>
   </div>
+
+  <script>
+    function deleteOrder(orderId) {
+      if (confirm('정말로 삭제하시겠습니까?')) {
+        fetch('/api/admin/orders/' + orderId + '/cancel', {
+          method: 'POST'
+        }).then(response => {
+          if (response.redirected) {
+            window.location.href = response.url;
+          } else if (response.ok) {
+            alert('삭제되었습니다.');
+            window.location.href = '/api/admin/orders';
+          } else {
+            alert('삭제 실패');
+          }
+        });
+      }
+    }
+  </script>
+
 </th:block>
 </body>
 </html>
