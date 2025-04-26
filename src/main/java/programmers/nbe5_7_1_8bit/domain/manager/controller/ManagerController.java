@@ -9,13 +9,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import programmers.nbe5_7_1_8bit.domain.manager.entity.AdminOnly;
 import programmers.nbe5_7_1_8bit.domain.manager.service.AuthService;
 import programmers.nbe5_7_1_8bit.domain.manager.utils.SessionUtils;
 
-@Controller("/manager")
+@Controller
+@RequestMapping("/manager")
 @RequiredArgsConstructor
 public class ManagerController {
 
@@ -24,7 +26,7 @@ public class ManagerController {
 
   @GetMapping("/login")
   String viewLogin() {
-    return "";
+    return "manager-auth";
   }
 
   @PostMapping("/login")
@@ -33,10 +35,10 @@ public class ManagerController {
       Model model) {
     if (authService.login(password)) {
       sessionUtils.makeSessionAuth(request, response, session);
-      return "redirect:/dashboard";
+      return "redirect:/manager/dashboard";
     }
     model.addAttribute("errorCode", "invalid login");
-    return "";
+    return "manager-auth";
   }
 
   @GetMapping("/logout")
@@ -50,6 +52,6 @@ public class ManagerController {
   @GetMapping("/dashboard")
   @AdminOnly
   String dashboard() {
-    return "dashboard";
+    return "manager-dashboard";
   }
 }

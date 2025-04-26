@@ -19,7 +19,7 @@ public class InquiryAnswerServiceImpl implements InquiryAnswerService {
   @Override
   public void save(InquiryAnswerDto inquiryAnswerDto) {
     inquiryRepository
-        .findById(inquiryAnswerDto.getId())
+        .findById(inquiryAnswerDto.getInquiryId())
         .ifPresentOrElse(
             inquiry -> inquiry.answerInquiry(InquiryAnswerDto.of(inquiryAnswerDto.getAnswer())),
             () -> {
@@ -35,7 +35,7 @@ public class InquiryAnswerServiceImpl implements InquiryAnswerService {
   @Override
   public void update(InquiryAnswerDto inquiryAnswerDto) {
     inquiryAnswerRepository
-        .findById(inquiryAnswerDto.getId())
+        .findById(inquiryAnswerDto.getInquiryId())
         .ifPresent(inquiryAnswer -> inquiryAnswer.update(inquiryAnswerDto));
   }
 

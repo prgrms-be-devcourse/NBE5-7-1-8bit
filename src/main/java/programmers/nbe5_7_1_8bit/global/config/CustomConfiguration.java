@@ -14,7 +14,6 @@ import programmers.nbe5_7_1_8bit.domain.inquiry.service.InquiryServiceImpl;
 import programmers.nbe5_7_1_8bit.domain.manager.repository.ManagerRepository;
 import programmers.nbe5_7_1_8bit.domain.manager.service.AuthService;
 import programmers.nbe5_7_1_8bit.domain.manager.service.AuthServiceImpl;
-import programmers.nbe5_7_1_8bit.domain.member.repository.MemberRepository;
 
 @EnableJpaAuditing
 @Configuration
@@ -24,12 +23,12 @@ public class CustomConfiguration {
 
   private final InquiryRepository inquiryRepository;
   private final InquiryAnswerRepository inquiryAnswerRepository;
-  private final MemberRepository memberRepository;
   private final ManagerRepository managerRepository;
+  private final HibernateFilterManager hibernateFilterManager;
 
   @Bean
   InquiryService inquiryService() {
-    return new InquiryServiceImpl(inquiryRepository, memberRepository);
+    return new InquiryServiceImpl(hibernateFilterManager, inquiryRepository);
   }
 
   @Bean
