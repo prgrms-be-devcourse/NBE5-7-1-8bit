@@ -20,16 +20,6 @@ import programmers.nbe5_7_1_8bit.domain.product.exception.ProductException.Produ
 import programmers.nbe5_7_1_8bit.domain.product.exception.ProductException.RemovedProductException;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-import programmers.nbe5_7_1_8bit.domain.product.dto.ProductRequestDto;
-import programmers.nbe5_7_1_8bit.domain.product.dto.ProductResponseDto;
-import programmers.nbe5_7_1_8bit.domain.product.entity.Product;
 import programmers.nbe5_7_1_8bit.domain.product.repository.ProductRepository;
 
 @Service
@@ -72,7 +62,7 @@ public class ProductService {
   }
 
   @Transactional
-  public ProductResponseDto updateProduct(Long id, ProductRequestDto updateRequest) {
+  public ProductResponseDto editProduct(Long id, ProductRequestDto updateRequest) {
     Product product = productRepository.findById(id)
         .orElseThrow(ProductNotFoundException::new);
 
@@ -94,6 +84,10 @@ public class ProductService {
   public String uploadImage(Long productId, MultipartFile file) throws IOException {
     Product product = productRepository.findById(productId)
         .orElseThrow(ProductNotFoundException::new);
+
+    if (product.getImagePath() != null && !product.getImagePath().isEmpty()) {
+      deleteImageFile(product.getImagePath());
+    }
 
     Path uploadPath = Paths.get(UPLOAD_DIRECTORY);
     if (!Files.exists(uploadPath)) {
@@ -137,6 +131,18 @@ public class ProductService {
     return resource;
   }
 
+  @Transactional
+  public void deleteImage(Long productId) throws IOException {
+    Product product = productRepository.findById(productId)
+        .orElseThrow(ProductNotFoundException::new);
+
+    if (product.getImagePath() != null && !product.getImagePath().isEmpty()) {
+      deleteImageFile(product.getImagePath());
+      product.setImagePath(null);
+    }
+  }
+
+
 
   private void validateNotRemoved(Product product) {
     if(product.isRemoved()) {
@@ -157,4 +163,10 @@ public class ProductService {
 
     return productResponseDtoList;
   }
+
+  private void deleteImageFile(String imagePath) throws IOException {
+    Path path = Paths.get(UPLOAD_DIRECTORY).resolve(imagePath);
+    Files.deleteIfExists(path);
+  }
+
 }
