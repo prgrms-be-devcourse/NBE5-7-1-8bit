@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import programmers.nbe5_7_1_8bit.domain.inquiry.entity.InquiryDto;
 import programmers.nbe5_7_1_8bit.domain.inquiry.repository.InquiryRepository;
-import programmers.nbe5_7_1_8bit.domain.member.entity.Member;
-import programmers.nbe5_7_1_8bit.domain.member.repository.MemberRepository;
+import programmers.nbe5_7_1_8bit.global.config.HibernateFilterManager;
 
 @Service
 @RequiredArgsConstructor
@@ -17,18 +16,15 @@ import programmers.nbe5_7_1_8bit.domain.member.repository.MemberRepository;
 @Slf4j
 public class InquiryServiceImpl implements InquiryService {
 
+  private final HibernateFilterManager hibernateFilterManager;
+
   private final InquiryRepository inquiryRepository;
-  private final MemberRepository memberRepository;
 
   @Override
   public void save(InquiryDto inquiryDto) {
-    String email = inquiryDto.getEmail();
-    Member member =
-        memberRepository
-            .findByEmail(email)
-            .orElseGet(() -> memberRepository.save(new Member(email)));
-
-    inquiryRepository.save(InquiryDto.of(inquiryDto.getTitle(), inquiryDto.getQuestion(), member));
+    inquiryRepository.save(
+        InquiryDto.of(inquiryDto.getTitle(), inquiryDto.getQuestion(), inquiryDto.getName(),
+            inquiryDto.getPassword()));
   }
 
   @Override
@@ -38,7 +34,10 @@ public class InquiryServiceImpl implements InquiryService {
 
   @Override
   public Page<InquiryDto> findPage(int page, int offset) {
-    return inquiryRepository.findPageForManager(PageRequest.of(page, offset));
+    hibernateFilterManager.enableFilter("softDeleteFilter", "isRemoved", false);
+    Page<InquiryDto> result = inquiryRepository.findPageForManager(PageRequest.of(page, offset));
+    hibernateFilterManager.disableFilter("softDeleteFilter");
+    return result;
   }
 
   @Override
@@ -52,4 +51,5 @@ public class InquiryServiceImpl implements InquiryService {
   public void softDelete(Long inquiryId) {
     inquiryRepository.findById(inquiryId).ifPresent(inquiry -> inquiry.softDelete());
   }
+
 }

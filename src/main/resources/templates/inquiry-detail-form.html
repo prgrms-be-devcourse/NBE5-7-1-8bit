@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>문의 상세</title>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.18/dist/full.css" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-base-100 p-6">
+
+<div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-md" th:object="${inquiry}">
+
+  <h2 class="text-2xl font-bold mb-6">문의 상세</h2>
+
+  <div class="mb-4">
+    <label class="font-semibold">제목:</label>
+    <p class="mt-1" th:text="*{title}">제목</p>
+  </div>
+
+  <div class="mb-4">
+    <label class="font-semibold">이름:</label>
+    <p class="mt-1" th:text="*{name}">이름</p>
+  </div>
+
+  <div class="mb-4">
+    <label class="font-semibold">질문:</label>
+    <p class="mt-1 whitespace-pre-wrap" th:text="*{question}">질문</p>
+  </div>
+
+  <div class="mb-4" th:if="*{answer != null}">
+    <label class="font-semibold">답글:</label>
+    <p class="mt-1 whitespace-pre-wrap" th:text="*{answer}">답글</p>
+  </div>
+
+
+  <!-- 답글 작성 폼 (answer가 null일 때만 보이게) -->
+  <div class="mt-10">
+    <form th:action="@{/dashboard/inq/ans}" method="post" class="space-y-4">
+      <input type="hidden" name="inquiryId" th:value="*{inquiryId}"/>
+      <div>
+        <label for="answer" class="block font-semibold">답글 수정 및 생성:</label>
+        <textarea id="answer" name="answer" rows="5" class="textarea textarea-bordered w-full"
+                  required th:value="*{answer}"></textarea>
+      </div>
+
+      <div>
+        <button type="submit" class="btn btn-primary">답글 전송</button>
+      </div>
+    </form>
+  </div>
+
+
+  <div class="flex gap-4 mt-6">
+    <button class="btn btn-error text-white" th:onclick="|deleteInquiry(*{inquiryId})|">문의 삭제하기
+    </button>
+  </div>
+
+</div>
+
+<script>
+  function deleteInquiry(inquiryId) {
+    if (!confirm("정말 삭제하시겠습니까?")) {
+      return;
+    }
+
+    fetch(`/dashboard/inq?inquiryId=${inquiryId}`, {
+      method: 'DELETE'
+    })
+    .then(res => {
+      if (!res.ok) {
+        throw new Error("삭제 실패");
+      }
+      if (res.status == 200) {
+        alert("삭제되었습니다.");
+        window.location.href = "/dashboard/inq/page";
+        return;
+      }
+      alert("삭제에 실패했습니다: ");
+    })
+  }
+</script>
+
+</body>
+</html>

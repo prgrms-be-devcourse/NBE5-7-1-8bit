@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import programmers.nbe5_7_1_8bit.domain.member.entity.Member;
 
 @Getter
 @Setter
@@ -14,11 +13,12 @@ public class InquiryDto {
   private Long inquiryId;
   private String title;
   private String question;
+  private Long inquiryAnswerId;
   private String answer;
-  private String email;
+  private String name;
+  private String password;
   private LocalDate createdAt;
   private LocalDate updatedAt;
-
 
   // inquiry 입력
   public InquiryDto(String title, String question) {
@@ -28,8 +28,11 @@ public class InquiryDto {
 
 
   // inquiry 조회
-  public InquiryDto(String title, String question, String answer, LocalDate createdAt,
+  public InquiryDto(Long inquiryId, String title, String question, Long inquiryAnswerId,
+      String answer,
+      LocalDate createdAt,
       LocalDate updatedAt) {
+    this.inquiryId = inquiryId;
     this.title = title;
     this.question = question;
     this.answer = answer;
@@ -52,7 +55,7 @@ public class InquiryDto {
     this.question = question;
   }
 
-  public static Inquiry of(String title, String question, Member member) {
-    return Inquiry.builder().title(title).question(question).member(member).build();
+  public static Inquiry of(String title, String question, String name, String password) {
+    return Inquiry.builder().title(title).question(question).name(name).build();
   }
 }
