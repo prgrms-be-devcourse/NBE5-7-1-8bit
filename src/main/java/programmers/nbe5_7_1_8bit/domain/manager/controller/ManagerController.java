@@ -19,7 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import programmers.nbe5_7_1_8bit.domain.manager.entity.AdminOnly;
 import programmers.nbe5_7_1_8bit.domain.manager.service.AuthService;
 import programmers.nbe5_7_1_8bit.domain.manager.utils.SessionUtils;
-import programmers.nbe5_7_1_8bit.domain.order.dto.request.OrderRequest;
 import programmers.nbe5_7_1_8bit.domain.order.dto.request.OrderUpdateRequest;
 import programmers.nbe5_7_1_8bit.domain.order.dto.response.OrderDetailResponse;
 import programmers.nbe5_7_1_8bit.domain.order.dto.response.OrderListResponse;
