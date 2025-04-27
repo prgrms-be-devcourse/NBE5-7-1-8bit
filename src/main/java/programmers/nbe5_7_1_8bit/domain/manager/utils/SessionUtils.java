@@ -6,7 +6,8 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import programmers.nbe5_7_1_8bit.global.exception.IllegalManagerAccessException;
+import programmers.nbe5_7_1_8bit.global.exception.CustomException;
+import programmers.nbe5_7_1_8bit.global.exception.ErrorCode;
 
 @Component
 @RequiredArgsConstructor
@@ -29,10 +30,10 @@ public class SessionUtils {
     response.addCookie(cookieUtils.makeSessionIdCookie(session));
   }
 
-  public void accessSessionAuth(HttpSession session) {
+  public void accessSessionAuth(HttpSession session) throws CustomException{
     Boolean isAuth = getSessionAttribute(session);
     if (isAuth == null || !isAuth) {
-      throw new IllegalManagerAccessException();
+      throw new CustomException(ErrorCode.ILLEGAL_ADMIN_ACCESS);
     }
   }
 
