@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import programmers.nbe5_7_1_8bit.domain.manager.entity.AdminOnly;
 import programmers.nbe5_7_1_8bit.domain.product.dto.ProductRequestDto;
 import programmers.nbe5_7_1_8bit.domain.product.dto.ProductResponseDto;
 import programmers.nbe5_7_1_8bit.domain.product.service.ProductService;
@@ -32,14 +33,8 @@ public class ProductController {
 
   private final ProductService productService;
 
-  @ResponseBody
-  @PostMapping("1")
-  public ResponseEntity<ProductResponseDto> createProduct(@RequestBody ProductRequestDto request) {
-    ProductResponseDto product = productService.createProduct(request);
-    return ResponseEntity.status(201).body(product);
-  }
-
   @GetMapping
+  @AdminOnly
   public String listProducts(Model model) {
     List<ProductResponseDto> products = productService.memberGetProductList();
     model.addAttribute("products", products);
@@ -47,6 +42,7 @@ public class ProductController {
   }
 
   @GetMapping("/{productId}/detail")
+  @AdminOnly
   public String getProduct(@PathVariable Long productId, Model model) {
     ProductResponseDto product = productService.memberGetProduct(productId);
     model.addAttribute("product", product);
@@ -54,12 +50,14 @@ public class ProductController {
   }
 
   @GetMapping("/new")
+  @AdminOnly
   public String createProductForm(Model model) {
     model.addAttribute("product", new ProductRequestDto());
     return "admin/products/form";
   }
 
   @PostMapping
+  @AdminOnly
   public String createProduct(
       @ModelAttribute ProductRequestDto request,
       @RequestParam(value = "file", required = false) MultipartFile file,
@@ -82,6 +80,7 @@ public class ProductController {
   }
 
   @GetMapping("/{productId}/edit")
+  @AdminOnly
   public String editProductForm(@PathVariable Long productId, Model model) {
     ProductResponseDto product = productService.getProduct(productId);
     model.addAttribute("product", product);
@@ -104,6 +103,7 @@ public class ProductController {
 
 
   @PostMapping("/{productId}/edit")
+  @AdminOnly
   public String editProduct(@PathVariable Long productId,
       @ModelAttribute ProductRequestDto updateRequest, RedirectAttributes redirectAttributes) {
     productService.editProduct(productId, updateRequest);
@@ -112,6 +112,7 @@ public class ProductController {
   }
 
   @PostMapping("/{productId}/delete")
+  @AdminOnly
   public String deleteProduct(@PathVariable Long productId, RedirectAttributes redirectAttributes) {
     productService.deleteProduct(productId);
     redirectAttributes.addFlashAttribute("message", "상품이 성공적으로 삭제되었습니다.");
@@ -119,6 +120,7 @@ public class ProductController {
   }
 
   @GetMapping("/{productId}/image/form")
+  @AdminOnly
   public String imageUploadForm(@PathVariable Long productId, Model model) {
     ProductResponseDto product = productService.getProduct(productId);
     model.addAttribute("product", product);
@@ -126,6 +128,7 @@ public class ProductController {
   }
 
   @PostMapping("/{productId}/image")
+  @AdminOnly
   public String uploadImage(@PathVariable Long productId,
       @RequestParam("file") MultipartFile file,
       RedirectAttributes redirectAttributes) throws IOException {
@@ -146,6 +149,7 @@ public class ProductController {
   }
 
   @PostMapping("/{productId}/image/delete")
+  @AdminOnly
   public String deleteImage(@PathVariable Long productId, RedirectAttributes redirectAttributes) throws IOException {
     productService.deleteImage(productId);
     redirectAttributes.addFlashAttribute("message", "이미지가 성공적으로 삭제되었습니다.");

@@ -73,6 +73,7 @@ public class ManagerController {
   }
 
   @GetMapping("/orders")
+  @AdminOnly
   public String orderList(Model model) {
     List<OrderListResponse> orders = orderService.getAllOrders();
     model.addAttribute("orders", orders);
@@ -80,6 +81,7 @@ public class ManagerController {
   }
 
   @GetMapping("/orders/{orderId}")
+  @AdminOnly
   public String orderDetail(@PathVariable Long orderId, Model model) {
     OrderDetailResponse detail = orderService.getOrderDetailById(orderId);
     model.addAttribute("order", detail);
@@ -87,6 +89,7 @@ public class ManagerController {
   }
 
   @GetMapping("/orders/{orderId}/update")
+  @AdminOnly
   public String editOrderForm(@PathVariable Long orderId, Model model) {
     OrderDetailResponse order = orderService.getOrderDetailById(orderId);
     model.addAttribute("order", order);
@@ -95,6 +98,7 @@ public class ManagerController {
   }
 
   @PostMapping("/orders/{orderId}/update")
+  @AdminOnly
   public String updateOrder(@PathVariable Long orderId,
       @ModelAttribute OrderUpdateRequest request,
       RedirectAttributes redirectAttributes) {
@@ -104,6 +108,7 @@ public class ManagerController {
   }
 
   @PostMapping("orders/{orderId}/cancel")
+  @AdminOnly
   public String cancelProduct(@PathVariable Long orderId, RedirectAttributes redirectAttributes) {
     orderService.adminCancelOrder(orderId);
     redirectAttributes.addFlashAttribute("message", "주문이 성공적으로 삭제되었습니다.");
