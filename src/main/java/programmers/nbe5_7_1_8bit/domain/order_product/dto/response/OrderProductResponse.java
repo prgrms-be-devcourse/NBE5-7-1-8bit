@@ -12,13 +12,15 @@ public class OrderProductResponse {
   private String productName;
   private int quantity;
   private int price;
+  private String imagePath;
 
   public static OrderProductResponse from(OrderProduct orderProduct) {
     return new OrderProductResponse(
         orderProduct.getProduct().getId(),
         orderProduct.getProduct().getName(),
         orderProduct.getQuantity(),
-        orderProduct.getProduct().getPrice()
+        orderProduct.getProduct().getPrice(),
+        orderProduct.getProduct().getImagePath()
     );
   }
 }
