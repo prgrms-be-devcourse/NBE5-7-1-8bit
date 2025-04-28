@@ -48,7 +48,7 @@ class InquiryRepositoryTest {
 //    // given
 //    List<Inquiry> inquiries = new ArrayList<>();
 //    for (int i = 0; i < 10; i++) {
-//      inquiries.add(new Inquiry("t", "q", "p", "n"));
+//      inquiries.add(new Inquiry("t", "q", "p"));
 //    }
 //    List<Inquiry> result = inquiryRepository.saveAll(inquiries);
 //
@@ -56,11 +56,15 @@ class InquiryRepositoryTest {
 //    for (int i = 0; i < 3; i++) {
 //      result.get(i).softDelete();
 //    }
-//    inquiryRepository.saveAll(result);
+////    inquiryRepository.saveAll(result);
 //
-//    List<Inquiry> findInquires = inquiryRepository.findAllByName("n");
+//
 //    // then
+//    for (int i = 0; i < 3; i++) {
+//      assertThat(inquiryRepository.existsById(result.get(i).getId())).isFalse();
+//      assertThat(result.get(i).getCreatedAt()).isNotNull();
+//      assertThat(result.get(i).getUpdatedAt()).isNotNull();
+//    }
 //    hibernateFilterManager.disableFilter("softDeleteFilter");
-//    assertThat(findInquires).hasSize(7);
 //  }
 }

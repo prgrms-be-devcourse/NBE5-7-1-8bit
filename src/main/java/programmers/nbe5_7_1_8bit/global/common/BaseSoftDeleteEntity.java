@@ -1,31 +1,17 @@
 package programmers.nbe5_7_1_8bit.global.common;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
-import java.time.LocalDateTime;
 import lombok.Getter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-@EntityListeners(AuditingEntityListener.class)
 @Getter
 @MappedSuperclass
 @FilterDef(
     name = "softDeleteFilter",
     parameters = @ParamDef(name = "isRemoved", type = Boolean.class))
-public abstract class BaseSoftDeleteEntity {
-
-  @CreatedDate
-  @Column(name = "created_at", updatable = false)
-  private LocalDateTime createdAt;
-
-  @LastModifiedDate
-  @Column(name = "updated_at")
-  private LocalDateTime updatedAt;
+public abstract class BaseSoftDeleteEntity extends BaseEntity {
 
   @Column(name = "is_removed")
   private boolean isRemoved = false;

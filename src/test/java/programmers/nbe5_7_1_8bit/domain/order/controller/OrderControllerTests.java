@@ -66,6 +66,7 @@ public class OrderControllerTests {
         1L,
         "addressTest",
         "12345",
+        "",
         Status.BEFORE_SHIPPING,
         LocalDateTime.now(),
         Collections.emptyList()
@@ -80,7 +81,8 @@ public class OrderControllerTests {
 
     mockMvc.perform(post("/api/order")
             .contentType("application/json")
-            .content("{\"email\":\"test@example.com\", \"address\":\"addressTest\", \"postcode\":\"12345\", \"orderProducts\":[]}"))
+            .content(
+                "{\"email\":\"test@example.com\", \"address\":\"addressTest\", \"postcode\":\"12345\", \"orderProducts\":[]}"))
         .andExpect(status().isOk());
 
     verify(orderService, times(1)).save(any(OrderRequest.class));
@@ -94,7 +96,8 @@ public class OrderControllerTests {
 
     mockMvc.perform(put("/api/order/{orderId}", 1L)
             .contentType("application/json")
-            .content("{\"email\":\"updateTest@example.com\",\"address\":\"updateTest\",\"postcode\":\"54321\",\"orderProducts\":[]}"))
+            .content(
+                "{\"email\":\"updateTest@example.com\",\"address\":\"updateTest\",\"postcode\":\"54321\",\"orderProducts\":[]}"))
         .andExpect(status().isOk());
 
     verify(orderService, times(1)).updateOrder(any(Long.class), any(OrderRequest.class));
@@ -154,7 +157,8 @@ public class OrderControllerTests {
   @DisplayName("개별 주문 내역 조회 API 테스트")
   void get_order_detail_test() throws Exception {
 
-    when(orderService.getOrderByIdAndEmail(any(Long.class), any(String.class))).thenReturn(orderDetailResponse);
+    when(orderService.getOrderByIdAndEmail(any(Long.class), any(String.class))).thenReturn(
+        orderDetailResponse);
 
     mockMvc.perform(get("/api/order/{orderId}", 1L)
             .param("email", orderRequest.getEmail()))
