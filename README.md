@@ -42,61 +42,7 @@ Frountend : React
 <br/>
 
 ### 시스템 구성도
+![admin-flowchart.png](docs%2Fadmin-flowchart.png)
 
 ![client-flowchart.png](docs%2Fclient-flowchart.png)
 
-![admin-flowchart.png](docs%2Fadmin-flowchart.png)
-
-<br/>
-API 명세서
-(추후 Postman 문서나 Swagger 문서로 대체 가능)
-
-bash
-복사
-편집
-POST /menus
-GET /menus
-PUT /menus/{id}
-DELETE /menus/{id}
-모든 요청과 응답은 JSON 포맷 사용
-
-<br/>
-프로젝트 실행 방법
-bash
-복사
-편집
-# 프로젝트 클론
-git clone https://github.com/your-repo/cafe-menu-service.git
-
-# 프로젝트 디렉토리 이동
-cd cafe-menu-service
-
-# 빌드 및 실행
-./gradlew bootRun
-주의: application.yml 또는 application.properties에서 DB 연결 설정 필요
-
-<br/>
-기타
-SQL 또는 ORM 중 **ORM (JPA)**를 사용해 구현
-
-기본적인 예외 처리(GlobalExceptionHandler) 적용
-
-테스트 코드 일부 작성
-
-<br/>
-✨ 목표
-Spring Boot를 활용한 CRUD 서비스 개발 경험
-
-JPA를 통한 데이터베이스 연동 실습
-
-REST API 설계 및 구현 학습
-
-팀 프로젝트 협업 경험
-
-📌 추가로, 예를 들면
-WBS (프로젝트 일정) 링크
-
-팀원별 역할
-
-DB ERD 이미지
-같은 것도 추가하면 완성도 훨씬 올라간다.
