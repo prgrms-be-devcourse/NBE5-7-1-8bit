@@ -38,7 +38,9 @@
                             class="form-control mb-2"
                             required th:value="*{answer}"></textarea>
                   <div class="d-flex justify-content-end">
-                    <button type="button" class="btn btn-warning" th:onclick="'deleteInquiry('+*{inquiryId}+')'">문의 삭제</button>
+                    <button type="button" class="btn btn-warning"
+                            th:onclick="'deleteInquiry('+*{inquiryId}+')'">문의 삭제
+                    </button>
                     <button type="submit" class="btn btn-primary">답글 전송</button>
                   </div>
                 </form>
@@ -52,24 +54,27 @@
 
   <script>
     function deleteInquiry(inquiryId) {
-      if (!confirm("정말 삭제하시겠습니까?")) {
-        return;
-      }
-
-      fetch(`/api/inq?inquiryId=${inquiryId}`, {
-        method: 'DELETE'
-      })
-      .then(res => {
-        if (!res.ok) {
-          throw new Error("삭제 실패");
-        }
-        if (res.status == 200) {
-          alert("삭제되었습니다.");
-          window.location.href = "/api/inq/page";
-          return;
-        }
-        alert("삭제에 실패했습니다: ");
-      })
+      showConfirm("정말 삭제하시겠습니까?", () => {
+        fetch(`/api/inq?inquiryId=${inquiryId}`, {
+          method: 'DELETE'
+        })
+        .then(res => {
+          if (res.status == 200) {
+            showAlert("삭제되었습니다.");
+            setTimeout(() => {
+              window.location.href = "/api/inq/page";
+            }, 3000);
+          }
+        })
+        .catch(err => {
+          Swal.fire({
+            title: '오류',
+            text: err.message,
+            icon: 'error',
+            confirmButtonText: '확인'
+          });
+        });
+      });
     }
   </script>
 </th:block>
