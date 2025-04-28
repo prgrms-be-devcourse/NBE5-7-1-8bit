@@ -49,8 +49,6 @@ public class ProductService {
     Product product = productRepository.findById(productId)
         .orElseThrow(ProductNotFoundException::new);
 
-    validateNotRemoved(product);
-
     return ProductResponseDto.from(product);
   }
 
@@ -58,7 +56,6 @@ public class ProductService {
   public ProductResponseDto memberGetProduct(Long productId){
     Product product = productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException());
 
-    validateNotRemoved(product);
     return ProductResponseDto.from(product);
   }
 
@@ -66,8 +63,6 @@ public class ProductService {
   public ProductResponseDto editProduct(Long id, ProductRequestDto updateRequest) {
     Product product = productRepository.findById(id)
         .orElseThrow(ProductNotFoundException::new);
-
-    validateNotRemoved(product);
 
     product.update(updateRequest.getName(), updateRequest.getPrice(), updateRequest.getStock());
 
@@ -147,14 +142,6 @@ public class ProductService {
     if (product.getImagePath() != null && !product.getImagePath().isEmpty()) {
       deleteImageFile(product.getImagePath());
       product.setImagePath(null);
-    }
-  }
-
-
-
-  private void validateNotRemoved(Product product) {
-    if(product.isRemoved()) {
-      throw new RemovedProductException();
     }
   }
 
