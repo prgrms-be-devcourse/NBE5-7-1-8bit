@@ -1,4 +1,5 @@
 package programmers.nbe5_7_1_8bit.domain.product.service;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -89,7 +90,13 @@ public class ProductService {
       deleteImageFile(product.getImagePath());
     }
 
-    Path uploadPath = Paths.get(UPLOAD_DIRECTORY);
+    String uploadDir = new File(UPLOAD_DIRECTORY).getAbsolutePath();
+    Path uploadPath = Paths.get(uploadDir);
+
+    if (!Files.exists(uploadPath)) {
+      Files.createDirectories(uploadPath);
+    }
+
     if (!Files.exists(uploadPath)) {
       Files.createDirectories(uploadPath);
     }
@@ -109,6 +116,7 @@ public class ProductService {
 
     return savedFilename;
   }
+
 
 
   @Transactional(readOnly = true)

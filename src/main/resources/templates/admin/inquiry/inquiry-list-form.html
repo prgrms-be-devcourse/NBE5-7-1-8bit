@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{admin/layout :: html(content=~{::content}, title='상품 목록', currentMenu='products')}">
+      th:replace="~{admin/layout :: html(content=~{::content}, title='상품 목록', currentMenu='inquiry')}">
 <body>
 <th:block th:fragment="content">
   <div
@@ -27,6 +27,9 @@
         <td th:text="${inquiry.getName}"></td>
         <td th:text="${#temporals.format(inquiry.updatedAt, 'yyyy-MM-dd HH:mm')}"></td>
         <td th:text="${#temporals.format(inquiry.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+      </tr>
+      <tr th:if="${inquires.isEmpty()}">
+        <td colspan="6" class="text-center">등록된 문의가 없습니다.</td>
       </tr>
       </tbody>
     </table>
