@@ -47,7 +47,7 @@ public class ManagerController {
       sessionUtils.makeSessionAuth(request, response, session);
       return "redirect:/api/products";
     }
-    model.addAttribute("errorCode", "invalid login");
+    model.addAttribute("errorCode", "잘못된 관리자 비밀번호입니다.");
     return "admin/auth/manager-auth";
   }
 

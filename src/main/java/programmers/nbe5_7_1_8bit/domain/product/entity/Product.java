@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.SQLDelete;
-import programmers.nbe5_7_1_8bit.global.common.BaseEntity;
 import programmers.nbe5_7_1_8bit.global.common.BaseSoftDeleteEntity;
 
 @Getter

@@ -1,7 +1,6 @@
 package programmers.nbe5_7_1_8bit.domain.manager.entity;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import programmers.nbe5_7_1_8bit.domain.manager.utils.SessionUtils;
-import programmers.nbe5_7_1_8bit.global.exception.IllegalManagerAccessException;
 
 @Aspect
 @Component
@@ -23,25 +21,11 @@ public class AdminAspect {
   private final SessionUtils sessionUtils;
 
   @Before("@annotation(programmers.nbe5_7_1_8bit.domain.manager.entity.AdminOnly)")
-  public void checkAdminAccess() {
+  public void checkAdminAccess() throws IOException {
     HttpServletRequest req = ((ServletRequestAttributes)
         RequestContextHolder.currentRequestAttributes()).getRequest();
     HttpSession session = req.getSession(true);
 
-    try {
-      sessionUtils.accessSessionAuth(session);
-    } catch (IllegalManagerAccessException e) {
-      try {
-        HttpServletResponse response = ((ServletRequestAttributes)
-            RequestContextHolder.currentRequestAttributes()).getResponse();
-
-        if (response != null) {
-          response.sendRedirect("/api/admin/login"); // 원하는 경로로 리다이렉트
-        }
-      } catch (IOException ioException) {
-        log.error("리다이렉트 실패", ioException);
-      }
-
-    }
+    sessionUtils.accessSessionAuth(session);
   }
 }
